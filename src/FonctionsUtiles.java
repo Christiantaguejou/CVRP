@@ -6,8 +6,6 @@ import java.util.List;
  * Created by tardy on 07/03/2018.
  */
 public class FonctionsUtiles {
-    public FonctionsUtiles() {
-    }
 
     public List<Lieu> populer(String chemin) {
         List<Lieu> lieux = new ArrayList<>();
