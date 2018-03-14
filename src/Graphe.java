@@ -69,4 +69,30 @@ public class Graphe {
                         2
                 ));
     }
+
+    public Solution solutionGlouton(){
+        int capacite = 0;
+        List<Integer> itineraire = new ArrayList<>();
+        Solution solution = new Solution(itineraire);
+        itineraire.add(m_lieux.get(0).getId());
+
+        for(int i = 1; i < m_lieux.size(); i++){
+            capacite += m_lieux.get(i).getQuantite();
+            if(capacite <= 100 && i < m_lieux.size() - 1){
+                itineraire.add(m_lieux.get(i).getId());
+            }
+            else if(capacite > 100){
+                itineraire.add(m_lieux.get(0).getId());
+                capacite = 0;
+                capacite += m_lieux.get(i).getQuantite();
+                itineraire.add(m_lieux.get(0).getId());
+                itineraire.add(m_lieux.get(i).getId());
+            }
+            else if(i == m_lieux.size() - 1){
+                itineraire.add(m_lieux.get(i).getId());
+                itineraire.add(m_lieux.get(0).getId());
+            }
+        }
+        return solution;
+    }
 }
