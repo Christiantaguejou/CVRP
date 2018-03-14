@@ -9,11 +9,8 @@ public class MainTest {
     public static void main(String[] args) {
         Graphe graphe = new Graphe("./data/data01.txt");
 
-       /* Lieu lieu1 = graphe.getLieux().get(0);
-        Lieu lieu2 = graphe.getLieux().get(1);
-        System.out.println(lieu1.toString());
-        System.out.println(lieu2.toString());
-        System.out.println(graphe.calculDistance(lieu1,lieu2));*/
-        System.out.println(graphe.solutionGlouton().toString());
+       Tabou tabou = new Tabou(graphe,20);
+        System.out.println(tabou.getSolution());
+        System.out.println(tabou.quantiteRespectee(tabou.getSolution().getListeSolution()));
     }
 }

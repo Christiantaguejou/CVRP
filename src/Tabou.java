@@ -12,6 +12,7 @@ public class Tabou {
     public Tabou(Graphe graphe, int capactite) {
         this.graphe = graphe;
         this.listeTabou = new ArrayList<>(capactite);
+        this.solution = this.graphe.solutionGlouton();
     }
 
     public Graphe getGraphe() {
@@ -47,9 +48,21 @@ public class Tabou {
         return null;
     }
 
-    public boolean quantiteRespectee() {
+    public boolean quantiteRespectee(List<Integer> voisinage) {
 
-        return false;
+        int capacite = 0;
+        for (Integer id : voisinage) {
+            if (id == 0) {
+                if (capacite >100) {
+                    return false;
+                }
+                capacite = 0;
+            } else {
+                Lieu lieu = graphe.getLieux().get(id);
+                capacite += lieu.getQuantite();
+            }
+        }
+        return true;
     }
 
 }
