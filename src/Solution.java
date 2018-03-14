@@ -17,4 +17,13 @@ public class Solution {
     public void setListeSolution(List<Integer> listeSolution) {
         this.listeSolution = listeSolution;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder listeId = new StringBuilder();
+        for(int i = 0; i < listeSolution.size(); i++){
+            listeId.append(listeSolution.get(i)+" ");
+        }
+        return listeId.toString();
+    }
 }
