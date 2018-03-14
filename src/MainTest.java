@@ -8,7 +8,6 @@ public class MainTest {
 
     public static void main(String[] args) {
         Graphe graphe = new Graphe("./data/data01.txt");
-//        System.out.println(graphe.getLieux());
 
         Lieu lieu1 = graphe.getLieux().get(0);
         Lieu lieu2 = graphe.getLieux().get(1);
