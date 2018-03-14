@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,12 +12,9 @@ import java.util.List;
 public class Graphe {
 
     private List<Lieu> m_lieux;
-    private List<Arrete> m_arretes;
 
-    public Graphe(List<Lieu> lieux, List<Arrete> arretes) {
-
-        this.m_lieux = lieux;
-        this.m_arretes = arretes;
+    public Graphe(String chemin) {
+        this.m_lieux = this.populer(chemin);
     }
 
     public List<Lieu> getLieux() {
@@ -23,22 +25,48 @@ public class Graphe {
         this.m_lieux = lieux;
     }
 
-    public List<Arrete> getArretes() {
-        return m_arretes;
-    }
 
-    public void setArretes(List<Arrete> arretes) {
-        this.m_arretes = arretes;
-    }
 
-    public void makeGrapheComplet(){
-        FonctionsUtiles fonctionsUtiles = new FonctionsUtiles();
-        List<Lieu> lieux = fonctionsUtiles.populer("./data/data01.txt");
-        for (Lieu lieu: m_lieux
-             ) {
+    public List<Lieu> populer(String chemin) {
+        List<Lieu> lieux = new ArrayList<>();
+        String line = null;
+        try {
+            BufferedReader inFile = new BufferedReader(new FileReader(chemin));
+            line = inFile.readLine();
+            if (line != null) {
+                while ((line = inFile.readLine()) != null) {
 
+                    String[] data = line.split(";");
+                    Lieu lieu = new Lieu();
+
+                    lieu.setId(Integer.parseInt(data[0]));
+                    lieu.setCoordonnees(new Coordonnees(Integer.parseInt(data[1]),Integer.parseInt(data[2])));
+                    lieu.setQuantite(Integer.parseInt(data[3]));
+
+                    lieux.add(lieu);
+                }
+            }
+
+            inFile.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        return lieux;
     }
 
-
+    public float calculDistance(Lieu lieu1, Lieu lieu2) {
+        Coordonnees coordonneesLieu1 = lieu1.getCoordonnees();
+        Coordonnees coordonneesLieu2 = lieu2.getCoordonnees();
+        return (float) Math.sqrt(
+                Math.pow(
+                        coordonneesLieu2.getX() - coordonneesLieu1.getX(),
+                        2
+                )+ Math.pow(
+                        coordonneesLieu2.getY() - coordonneesLieu1.getY(),
+                        2
+                ));
+    }
 }

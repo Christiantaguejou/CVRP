@@ -7,12 +7,13 @@ import java.util.List;
 public class MainTest {
 
     public static void main(String[] args) {
-        List<Lieu> lieux;
-        List<Arrete> arretes = new ArrayList();
-        FonctionsUtiles fonctionsUtiles = new FonctionsUtiles();
-        lieux = fonctionsUtiles.populer("./data/data01.txt");
-        System.out.println(lieux);
-        arretes.add(new Arrete(lieux.get(0),lieux.get(1)));
-        Graphe graphe = new Graphe(lieux,arretes);
+        Graphe graphe = new Graphe("./data/data01.txt");
+//        System.out.println(graphe.getLieux());
+
+        Lieu lieu1 = graphe.getLieux().get(0);
+        Lieu lieu2 = graphe.getLieux().get(1);
+        System.out.println(lieu1.toString());
+        System.out.println(lieu2.toString());
+        System.out.println(graphe.calculDistance(lieu1,lieu2));
     }
 }
