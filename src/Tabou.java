@@ -1,5 +1,10 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+
+import static java.lang.Math.floor;
+import static java.lang.Math.random;
 
 /**
  * Created by tardy on 14/03/2018.
@@ -31,7 +36,7 @@ public class Tabou {
         this.solution = solution;
     }
 
-    public float calculSolution() {
+    public float calculSolution(Solution solution) {
         float resultat = 0;
         Integer idTemp = 0;
         for ( Integer id : solution.getListeSolution()) {
@@ -43,9 +48,34 @@ public class Tabou {
         return resultat;
     }
 
-    public List retourneVoisinage() {
+    public HashMap<Solution, int[]> retourneVoisinage(int nombreDeVoisin) {
 
-        return null;
+        HashMap<Solution, int[]> voisinage = new HashMap<>();
+        int i = 0;
+        do {
+            List<Integer> solution = new ArrayList<>();
+            solution.addAll(this.solution.getListeSolution());
+            int randomInt1, randomInt2;
+            do {
+                randomInt1 = (int) (random() * solution.size());
+                randomInt2 = (int) (random() * solution.size());
+            } while ((solution.get(randomInt1).equals(0) || solution.get(randomInt2).equals(0)));
+
+            Integer id1 = solution.get(randomInt1);
+            Integer id2 = solution.get(randomInt2);
+
+            solution.set(randomInt1, id2);
+            solution.set(randomInt2, id1);
+            i++;
+            Solution sol = new Solution(solution);
+            if (!voisinage.keySet().contains(sol)) {
+                voisinage.put(sol, new int[]{randomInt1, randomInt2});
+            } else {
+                i--;
+            }
+        } while ( i<= nombreDeVoisin);
+
+        return voisinage;
     }
 
     public boolean quantiteRespectee(List<Integer> voisinage) {
@@ -65,4 +95,40 @@ public class Tabou {
         return true;
     }
 
+    public void execute(int nombreIteration, int nombreDeVoisin) {
+        HashMap<Solution,int[]> voisinage = this.retourneVoisinage( nombreDeVoisin);
+        List<Integer> listeSol = new ArrayList<>();
+        List<Integer> listeTabou = new ArrayList<>();
+
+        listeSol.addAll(this.solution.getListeSolution());
+        Solution solutionActuelle = new Solution(listeSol);
+        float coutSolutionActuelle = this.calculSolution(solutionActuelle);
+        int i = 0;
+
+        while (i <= nombreIteration) {
+
+            Solution meilleureSolution = retourneMeilleureSolution(voisinage);
+            if (calculSolution(meilleureSolution) >= coutSolutionActuelle) {
+                listeTabou.add(1);
+            }
+            i++;
+            voisinage =retourneVoisinage(nombreDeVoisin);
+        }
+    }
+
+    public Solution retourneMeilleureSolution(HashMap<Solution, int[]> listeSolutions) {
+        Iterator iterator = listeSolutions.entrySet().iterator();
+        Solution solutionMeilleure = (Solution) iterator.next();
+        float coutMeilleur = calculSolution(solutionMeilleure);
+
+        while (iterator.hasNext()) {
+            Solution solTemp = (Solution) iterator.next();
+            float cout = calculSolution(solTemp);
+            if (cout <= coutMeilleur) {
+                solutionMeilleure = solTemp;
+                coutMeilleur = cout;
+            }
+        }
+        return solutionMeilleure;
+    }
 }
