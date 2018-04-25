@@ -63,6 +63,11 @@ public class InterfaceGraphique extends JFrame{
             while (iterator.hasNext()) {
                 if (iterator.hasNext()) {
                     Lieu lieu2 = (Lieu) iterator.next();
+                    if (lieu.getId() == 0 && lieu2.getId() == 0 && g.getColor().equals(Color.BLUE)) {
+                        g.setColor(Color.orange);
+                    } else if (lieu.getId() == 0 && lieu2.getId() == 0 && g.getColor().equals(Color.BLUE)) {
+                        g.setColor(Color.BLUE);
+                    }
                     g.drawLine(lieu.getCoordonnees().getX()*10,
                             lieu.getCoordonnees().getY()*10,
                             lieu2.getCoordonnees().getX()*10,
