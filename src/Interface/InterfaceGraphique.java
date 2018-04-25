@@ -34,11 +34,10 @@ public class InterfaceGraphique extends JFrame{
         // Set the Drawing JPanel as the JFrame's content-pane
         Container cp = getContentPane();
         cp.add(canvas);
-        // or "setContentPane(canvas);"
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);   // Handle the CLOSE button
-        pack();              // Either pack() the components; or setSize()
-        setTitle("......");  // "super" JFrame sets the title
+        setSize(1500,1500);
+        setTitle("Graphe solution");  // "super" JFrame sets the title
         setVisible(true);    // "super" JFrame show
     }
 
@@ -49,22 +48,10 @@ public class InterfaceGraphique extends JFrame{
         // Override paintComponent to perform your own painting
         @Override
         public void paintComponent(Graphics g) {
-            super.paintComponent(g);     // paint parent's background
-            setBackground(Color.BLACK);  // set background color for this JPanel
+            super.paintComponent(g);
+            setBackground(Color.WHITE);
+            g.setColor(Color.BLUE);
 
-            // Your custom painting codes. For example,
-            // Drawing primitive shapes
-//            g.setColor(Color.YELLOW);    // set the drawing color
-//            g.drawLine(30, 40, 100, 200);
-//            g.drawOval(150, 180, 10, 10);
-//            g.drawRect(200, 210, 20, 30);
-//            g.setColor(Color.RED);       // change the drawing color
-//            g.fillOval(300, 310, 30, 50);
-//            g.fillRect(400, 350, 60, 50);
-            // Printing texts
-            g.setColor(Color.WHITE);
-//            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
-//            g.drawString("Testing custom drawing ...", 10, 20);
             ArrayList<Lieu> lieux = new ArrayList<>();
             for (Integer integer : solution.getListeSolution()) {
                 lieux.add(graphe.getLieux().get(integer));
@@ -72,15 +59,16 @@ public class InterfaceGraphique extends JFrame{
 
             Iterator iterator = lieux.iterator();
             Lieu lieu = null;
+            lieu = (Lieu) iterator.next();
             while (iterator.hasNext()) {
-                lieu = (Lieu) iterator.next();
                 if (iterator.hasNext()) {
                     Lieu lieu2 = (Lieu) iterator.next();
-                    g.drawLine(lieu.getCoordonnees().getX(),
-                            lieu.getCoordonnees().getY(),
-                            lieu2.getCoordonnees().getX(),
-                            lieu2.getCoordonnees().getY()
+                    g.drawLine(lieu.getCoordonnees().getX()*10,
+                            lieu.getCoordonnees().getY()*10,
+                            lieu2.getCoordonnees().getX()*10,
+                            lieu2.getCoordonnees().getY()*10
                     );
+                    lieu = lieu2;
                 }
             }
 

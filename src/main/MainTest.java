@@ -15,11 +15,11 @@ public class MainTest {
     public static void main(String[] args) {
         Graphe graphe = new Graphe("./data/data01.txt");
 
-        double temperatureInitiale = 30;
-        double probabilite = 0.8;
-        int nombreIterationAvantChangementTemp = 2;
-        int nombreIteration = 100000000;
-        double mu = 0.99;
+        double temperatureInitiale = 40;
+        double probabilite = 0.5;
+        int nombreIterationAvantChangementTemp = 60;
+        int nombreIteration = 10;
+        double mu = 0.5;
 
         Recuit recuit = new Recuit(
                 graphe,
