@@ -1,9 +1,14 @@
+package algorithmes;
+
+import metier.Graphe;
+import metier.Lieu;
+import metier.Solution;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.lang.Math.floor;
 import static java.lang.Math.random;
 
 /**
