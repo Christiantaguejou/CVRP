@@ -1,7 +1,11 @@
 package main;
 
+import Interface.InterfaceGraphique;
 import algorithmes.Recuit;
 import metier.Graphe;
+import metier.Solution;
+
+import javax.swing.*;
 
 /**
  * Created by tardy on 07/03/2018.
@@ -25,6 +29,15 @@ public class MainTest {
                 nombreIteration,
                 mu
         );
-        recuit.run();
+        Solution solution = recuit.run();
+
+        // Run the GUI codes on the Event-Dispatching thread for thread safety
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new InterfaceGraphique(solution, graphe); // Let the constructor do the job
+            }
+        });
+
     }
 }

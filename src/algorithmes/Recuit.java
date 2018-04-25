@@ -45,7 +45,7 @@ public class Recuit {
         this.mu = mu;
     }
 
-    public void run() {
+    public Solution run() {
         int n1 = nombreIteration;
         int n2 = nombreIterationAvantChangementTemp;
 
@@ -72,7 +72,7 @@ public class Recuit {
             temperature = mu * temperature;
         }
 
-        System.out.println(solutionMin);
+        return solutionMin;
 
 
     }
