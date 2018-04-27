@@ -11,7 +11,7 @@ import java.util.Random;
 public class Genetique {
 
     private static int NBR_ITERATION = 1;
-    private int NBR_SOLUTION = 2;
+    private int NBR_SOLUTION = 4;
     List<Lieu> m_lieux;
     List<Solution> population;
 
@@ -26,7 +26,7 @@ public class Genetique {
         population = new ArrayList<>();
         for(int i = 0; i < NBR_SOLUTION; i++){
             population.add(new Solution(getLieuRandom()));
-            System.out.println(population.get(i).getListeRoute());
+            System.out.println(i+": "+population.get(i).getListeRoute());
         }
 
         for(int i = 0; i < NBR_ITERATION; i++){
@@ -53,7 +53,7 @@ public class Genetique {
             for(int j = 0; j < population.size(); j++){
                 probaListe.set(j, probaListe.get(j)/probaTotale);
             }
-            System.out.println(probaListe);
+            System.out.println("Proba: "+probaListe);
 
             //Determination des meilleurs solutions
             int m1 = 0, m2 = 0;
@@ -71,29 +71,43 @@ public class Genetique {
                     m2 = j;
                 }
             }
-            System.out.println(m1+" : "+m2);
+            System.out.println("Best probas: "+m1+" : "+m2);
+           // croisement(population.get(m1), population.get(m2));
+            System.out.println("Fille: "+croisement(population.get(m1), population.get(m2)).getListeSolution());
 
-            //Croisement relou entre population.get(m1) et population.get(m2)
+            //Prendre une "route" de chaque solution pere et mere distinct
+            //Et completer la nouvelle solution par les sommets restants
 
         }
     }
 
     private Solution croisement(Solution pere, Solution mere){
-        //Prendre une "route" de chaque solution pere et mere distinct
-        //Et completer la nouvelle solution par les sommets restants
-        List<Integer> itineraire = new ArrayList<>();
-        Solution fille = new Solution(itineraire);
+        List<Integer> routefille = new ArrayList<>();
+        Solution fille = new Solution(routefille);
             //Trouver deux routes disjoinctes
-        List<Integer> routePere = new ArrayList<>();
-        List<Integer> routeMere = new ArrayList<>();
+        List<Integer> routePere;
+        List<Integer> routeMere;
 
+
+        finIteration:
         for(int i = 0; i < pere.getListeRoute().size(); i++){
             routePere = pere.getListeRoute().get(i);
             for(int j = 0; j < mere.getListeRoute().size(); j++){
                 routeMere = mere.getListeRoute().get(j);
 
+                for(int k = 0; k < routeMere.size(); k++) {
+                    if(routePere.contains(routeMere.get(k)))
+                        break;
+                    if(k == routeMere.size()-1){
+                        routefille.addAll(routePere);
+                        routefille.addAll(routeMere);
+                        break finIteration;
+                    }
+                }
+
             }
         }
+
 
         return fille;
     }
