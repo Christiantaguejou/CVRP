@@ -1,5 +1,7 @@
 package metier;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +20,26 @@ public class Solution {
 
     public void setListeSolution(List<Integer> listeSolution) {
         this.listeSolution = listeSolution;
+    }
+
+    public List<ArrayList<Integer>> getListeRoute(){
+        List<ArrayList<Integer>> listeRoute = new ArrayList<>();
+        ArrayList<Integer> route = new ArrayList<>();
+
+        for(int i = 1; i < listeSolution.size(); i++){
+            //route = new ArrayList<>();
+            if(listeSolution.get(i) > 0)
+                route.add(listeSolution.get(i));
+            else if(listeSolution.get(i) == 0){
+                listeRoute.add(route);
+                route = new ArrayList<>();
+            }
+
+            //System.out.println(route);
+           // System.out.println(listeRoute);
+        }
+
+        return listeRoute;
     }
 
     @Override

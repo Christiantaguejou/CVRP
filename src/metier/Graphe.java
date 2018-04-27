@@ -13,6 +13,7 @@ import java.util.List;
 public class Graphe {
 
     private List<Lieu> m_lieux;
+    public static int CAPACITE_MAX = 100;
 
     public Graphe(String chemin) {
         this.m_lieux = this.populer(chemin);
@@ -58,7 +59,7 @@ public class Graphe {
         return lieux;
     }
 
-    public float calculDistance(Lieu lieu1, Lieu lieu2) {
+    public static float calculDistance(Lieu lieu1, Lieu lieu2) {
         Coordonnees coordonneesLieu1 = lieu1.getCoordonnees();
         Coordonnees coordonneesLieu2 = lieu2.getCoordonnees();
         return (float) Math.sqrt(
