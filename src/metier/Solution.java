@@ -27,19 +27,27 @@ public class Solution {
         ArrayList<Integer> route = new ArrayList<>();
 
         for(int i = 1; i < listeSolution.size(); i++){
-            //route = new ArrayList<>();
             if(listeSolution.get(i) > 0)
                 route.add(listeSolution.get(i));
             else if(listeSolution.get(i) == 0){
                 listeRoute.add(route);
                 route = new ArrayList<>();
             }
-
-            //System.out.println(route);
-           // System.out.println(listeRoute);
         }
-
         return listeRoute;
+    }
+
+    public void setListeRoute(List<ArrayList<Integer>> listeRoute){
+        List<Integer> listeSolution = new ArrayList<>();
+
+        listeSolution.add(0);
+        for(int i = 0; i < listeRoute.size(); i++){
+            for(int j = 0; j < listeRoute.get(i).size(); j++){
+                listeSolution.add(listeRoute.get(i).get(j));
+            }
+            listeSolution.add(0);
+        }
+        this.listeSolution = listeSolution;
     }
 
     @Override

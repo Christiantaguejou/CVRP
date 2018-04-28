@@ -11,7 +11,7 @@ import java.util.Random;
 public class Genetique {
 
     private static int NBR_ITERATION = 1;
-    private int NBR_SOLUTION = 4;
+    private int NBR_SOLUTION = 50;
     List<Lieu> m_lieux;
     List<Solution> population;
 
@@ -24,14 +24,14 @@ public class Genetique {
     public void algoGen(){
 
         population = new ArrayList<>();
-        for(int i = 0; i < NBR_SOLUTION; i++){
-            population.add(new Solution(getLieuRandom()));
-            System.out.println(i+": "+population.get(i).getListeRoute());
-        }
 
+        for(int i = 0; i < NBR_SOLUTION; i++){
+            population.add(new Solution(getLieuRandom(new ArrayList<>())));
+        }
         for(int i = 0; i < NBR_ITERATION; i++){
             List<Double> fitness = new ArrayList<>();
             List<Double> probaListe = new ArrayList<>();
+            Solution fille;
             double fitnessTotal = 0;
             double probaTotale = 0;
 
@@ -53,7 +53,6 @@ public class Genetique {
             for(int j = 0; j < population.size(); j++){
                 probaListe.set(j, probaListe.get(j)/probaTotale);
             }
-            System.out.println("Proba: "+probaListe);
 
             //Determination des meilleurs solutions
             int m1 = 0, m2 = 0;
@@ -71,24 +70,101 @@ public class Genetique {
                     m2 = j;
                 }
             }
-            System.out.println("Best probas: "+m1+" : "+m2);
-           // croisement(population.get(m1), population.get(m2));
-            System.out.println("Fille: "+croisement(population.get(m1), population.get(m2)).getListeSolution());
+            fille = croisement(population.get(m1), population.get(m2));
 
-            //Prendre une "route" de chaque solution pere et mere distinct
-            //Et completer la nouvelle solution par les sommets restants
+            List<Integer> sommetsPresents = new ArrayList<>();
+            for(int j = 0; j < fille.getListeSolution().size(); j++) {
+                if(fille.getListeSolution().get(j) != 0)
+                    sommetsPresents.add(fille.getListeSolution().get(j));
+            }
+
+            List<Integer> newSommets;
+            newSommets = getLieuRandom(sommetsPresents);
+
+            for(int j = 0; j < newSommets.size(); j++)
+                fille.getListeSolution().add(newSommets.get(j));
+            System.out.println("Fille: "+fille.getListeRoute());
+
+            mutation(fille);
 
         }
     }
 
+    /**
+     * La mutation consiste d'échanger deux sommets de deux trajets différents,
+     * en respectant la contrainte de capacite <=100
+     * @param fille
+     */
+    private void mutation(Solution fille){
+        List<ArrayList<Integer>> routeFille = fille.getListeRoute();
+        List<Integer> newRoute1 = new ArrayList<>();
+        List<Integer> newRoute2 = new ArrayList<>();
+        int newCapacite1 = 0;
+        int newCapacite2 = 0;
+        int i = 0;
+        mutationReussi:
+        for(i = 0; i < routeFille.size() - 1; i++){
+            ArrayList<Integer> route1 = routeFille.get(i);
+            ArrayList<Integer> route2 = routeFille.get(i+1);
+
+            for(int j = 0; j < route1.size(); j++){
+                for(int k = 0; k < route2.size(); k++){
+                    newRoute2.addAll(route2);
+                    newRoute2.set(k, route1.get(j));
+                    newRoute1.addAll(route1);
+                    newRoute1.set(j, route2.get(k));
+
+                    newCapacite1 = capaciteRoute(newRoute1);
+                    newCapacite2 = capaciteRoute(newRoute2);
+
+                    if(newCapacite1 <= 100 && newCapacite2 <=100)
+                        break mutationReussi;
+                    else{
+                        newRoute1.clear();
+                        newRoute2.clear();
+                        newCapacite1 = 0;
+                        newCapacite2 = 0;
+                    }
+
+                }
+            }
+        }
+        System.out.println(i+" : "+newCapacite1 + " : "+newRoute1);
+        System.out.println(i+1+" : "+newCapacite2 + " : "+newRoute2);
+
+        routeFille.set(i, (ArrayList<Integer>) newRoute1);
+        routeFille.set(i+1, (ArrayList<Integer>) newRoute2);
+        fille.setListeRoute(routeFille);
+
+        System.out.println(fille.getListeRoute());
+        System.out.println(fille);
+    }
+
+    /**
+     * Calcul la capacite d'un vehicule pour un trajet
+     * @param route
+     * @return
+     */
+    private int capaciteRoute(List<Integer> route){
+        int capacite = 0;
+            for(int i = 0; i < route.size(); i++)
+                capacite += m_lieux.get(route.get(i)).getQuantite();
+        return capacite;
+    }
+
+    /**
+     * Permet d'effectuer le croisement de l'algo Genetique
+     * @param pere
+     * @param mere
+     * @return
+     */
     private Solution croisement(Solution pere, Solution mere){
         List<Integer> routefille = new ArrayList<>();
         Solution fille = new Solution(routefille);
-            //Trouver deux routes disjoinctes
         List<Integer> routePere;
         List<Integer> routeMere;
 
-
+        routefille.add(0);
         finIteration:
         for(int i = 0; i < pere.getListeRoute().size(); i++){
             routePere = pere.getListeRoute().get(i);
@@ -100,6 +176,7 @@ public class Genetique {
                         break;
                     if(k == routeMere.size()-1){
                         routefille.addAll(routePere);
+                        routefille.add(0);
                         routefille.addAll(routeMere);
                         break finIteration;
                     }
@@ -112,7 +189,12 @@ public class Genetique {
         return fille;
     }
 
-    public double distanceTotal(Solution sol){
+    /**
+     * Calcul du cout total d'une solution
+     * @param sol : Solution dont le cout sera calculé
+     * @return
+     */
+    private double distanceTotal(Solution sol){
         double distanceTotal = 0;
 
         for(int i = 0; i <= m_lieux.size()-2; i++){
@@ -123,22 +205,24 @@ public class Genetique {
         return distanceTotal;
     }
 
-    private List<Integer> getLieuRandom(){
+    /**
+     * Genere une liste de sommet en respectant les consignes
+     * @param valeurExcept : Liste des Sommets à ne pas ajouter car ils sont déjà presents
+     * @return
+     */
+    private List<Integer> getLieuRandom(List<Integer> valeurExcept){
         int iter = 0;
         int capacite = 0;
-        List<Integer> valeurExcept = new ArrayList<>();
         List<Integer> itineraire = new ArrayList<>();
-        itineraire.add(0);
-       // Random rand = new Random();
 
+        itineraire.add(0);
         for(int i = 0; i < m_lieux.size(); i++){
             do{
-               // int rnd =  rand.nextInt(m_lieux.size() - 1)+1;
-                if(valeurExcept.size() == 31)
+                if(valeurExcept.size() == m_lieux.size()-1)
                     break;
+
                 int rnd = randomValeur(valeurExcept);
                 valeurExcept.add(rnd);
-               // System.out.println(rnd);
                 capacite +=  m_lieux.get(rnd).getQuantite();
 
                 if(capacite <= Graphe.CAPACITE_MAX  && !itineraire.contains(rnd)){
@@ -169,6 +253,11 @@ public class Genetique {
         return itineraire;
     }
 
+    /**
+     * Permet de generer une valeur aléatoire
+     * @param valeurExcept : Liste des valeurs à ne pas generer par la méthode
+     * @return
+     */
     private int randomValeur(List<Integer> valeurExcept){
         int rnd;
         Random rand = new Random();
