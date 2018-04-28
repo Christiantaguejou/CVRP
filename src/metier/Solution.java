@@ -10,6 +10,10 @@ import java.util.List;
 public class Solution {
     private List<Integer> listeSolution;
 
+    public Solution(){
+
+    }
+
     public Solution(List<Integer> listeSolution) {
         this.listeSolution = listeSolution;
     }

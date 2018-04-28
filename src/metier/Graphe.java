@@ -27,8 +27,6 @@ public class Graphe {
         this.m_lieux = lieux;
     }
 
-
-
     public List<Lieu> populer(String chemin) {
         List<Lieu> lieux = new ArrayList<>();
         String line = null;
@@ -95,6 +93,18 @@ public class Graphe {
                 itineraire.add(m_lieux.get(0).getId());
             }
         }
+        System.out.println(distanceTotal(solution));
         return solution;
+    }
+
+    public double distanceTotal(Solution sol){
+        double distanceTotal = 0;
+
+        for(int i = 0; i <= m_lieux.size()-2; i++){
+            distanceTotal += Graphe.calculDistance(m_lieux.get(sol.getListeSolution().get(i)),
+                    m_lieux.get(sol.getListeSolution().get(i+1)));
+        }
+
+        return distanceTotal;
     }
 }

@@ -10,8 +10,8 @@ import java.util.Random;
 
 public class Genetique {
 
-    private static int NBR_ITERATION = 1;
-    private int NBR_SOLUTION = 50;
+    private static int NBR_ITERATION = 5;
+    private int NBR_POPULATION = 2;
     List<Lieu> m_lieux;
     List<Solution> population;
 
@@ -25,9 +25,10 @@ public class Genetique {
 
         population = new ArrayList<>();
 
-        for(int i = 0; i < NBR_SOLUTION; i++){
+        for(int i = 0; i < NBR_POPULATION; i++){
             population.add(new Solution(getLieuRandom(new ArrayList<>())));
         }
+
         for(int i = 0; i < NBR_ITERATION; i++){
             List<Double> fitness = new ArrayList<>();
             List<Double> probaListe = new ArrayList<>();
@@ -83,11 +84,29 @@ public class Genetique {
 
             for(int j = 0; j < newSommets.size(); j++)
                 fille.getListeSolution().add(newSommets.get(j));
-            System.out.println("Fille: "+fille.getListeRoute());
 
-            mutation(fille);
+            fille = mutation(fille);
 
+            population.add(fille);
         }
+
+        bestSolution(population);
+    }
+
+    private void bestSolution(List<Solution> population){
+        double  fitness, minFitness = Integer.MAX_VALUE;
+        Solution s = new Solution();
+
+        for(int i = 0 ; i < population.size(); i++){
+            fitness = distanceTotal(population.get(i));
+            System.out.println(population.get(i).getListeRoute()+ " : "+fitness);
+            if(fitness < minFitness){
+                s = population.get(i);
+                minFitness = fitness;
+            }
+        }
+        System.out.println("Best Solution: "+s.getListeRoute()+" - "+minFitness);
+
     }
 
     /**
@@ -95,13 +114,14 @@ public class Genetique {
      * en respectant la contrainte de capacite <=100
      * @param fille
      */
-    private void mutation(Solution fille){
+    private Solution mutation(Solution fille){
         List<ArrayList<Integer>> routeFille = fille.getListeRoute();
         List<Integer> newRoute1 = new ArrayList<>();
         List<Integer> newRoute2 = new ArrayList<>();
         int newCapacite1 = 0;
         int newCapacite2 = 0;
         int i = 0;
+
         mutationReussi:
         for(i = 0; i < routeFille.size() - 1; i++){
             ArrayList<Integer> route1 = routeFille.get(i);
@@ -122,22 +142,19 @@ public class Genetique {
                     else{
                         newRoute1.clear();
                         newRoute2.clear();
-                        newCapacite1 = 0;
-                        newCapacite2 = 0;
                     }
 
                 }
             }
         }
-        System.out.println(i+" : "+newCapacite1 + " : "+newRoute1);
-        System.out.println(i+1+" : "+newCapacite2 + " : "+newRoute2);
+        //System.out.println(i+" : "+newCapacite1 + " : "+newRoute1);
+        //System.out.println(i+1+" : "+newCapacite2 + " : "+newRoute2);
 
         routeFille.set(i, (ArrayList<Integer>) newRoute1);
         routeFille.set(i+1, (ArrayList<Integer>) newRoute2);
         fille.setListeRoute(routeFille);
 
-        System.out.println(fille.getListeRoute());
-        System.out.println(fille);
+        return fille;
     }
 
     /**
@@ -194,7 +211,7 @@ public class Genetique {
      * @param sol : Solution dont le cout sera calculé
      * @return
      */
-    private double distanceTotal(Solution sol){
+    public double distanceTotal(Solution sol){
         double distanceTotal = 0;
 
         for(int i = 0; i <= m_lieux.size()-2; i++){
@@ -280,7 +297,7 @@ public class Genetique {
             appliquer une mutation sur n*
             ajouter n* à nouvelle_population
         population = nouvelle_population
-      retourner le noeud n qui à la fitness la plus élevée
+      retourner le noeud n qui à la fitness la moins élevée
     */
 }
 

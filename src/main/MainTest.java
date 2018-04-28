@@ -19,6 +19,7 @@ public class MainTest {
 
         Genetique gen = new Genetique(graphe);
         gen.algoGen();
+        //System.out.println(graphe.solutionGlouton());
        /*double temperatureInitiale = 40;
         double probabilite = 0.5;
         int nombreIterationAvantChangementTemp = 60;
