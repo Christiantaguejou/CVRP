@@ -114,6 +114,7 @@ public class Recuit {
                 resultat += graphe.calculDistance(lieu1, lieu2);
             }
         }
+        System.out.println(resultat);
         return resultat;
     }
 

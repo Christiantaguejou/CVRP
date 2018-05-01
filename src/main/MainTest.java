@@ -2,11 +2,15 @@ package main;
 
 import Interface.InterfaceGraphique;
 import algorithmes.Genetique;
+import algorithmes.MethodesUtiles;
 import algorithmes.Recuit;
 import metier.Graphe;
 import metier.Solution;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -19,7 +23,7 @@ public class MainTest {
 
         Genetique gen = new Genetique(graphe);
         gen.algoGen();
-        //System.out.println(graphe.solutionGlouton());
+
        /*double temperatureInitiale = 40;
         double probabilite = 0.5;
         int nombreIterationAvantChangementTemp = 60;
@@ -45,4 +49,5 @@ public class MainTest {
         });*/
 
     }
+
 }
