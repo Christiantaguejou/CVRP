@@ -21,7 +21,7 @@ public class MainTest {
         Solution solutionGen = gen.algoGen();
 
         //System.out.println(graphe.solutionGlouton());
-        double temperatureInitiale = 40;
+        double temperatureInitiale = 165;
         double probabilite = 0.5;
         int nombreIterationAvantChangementTemp = 60;
         int nombreIteration = 10;

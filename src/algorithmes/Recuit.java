@@ -72,6 +72,7 @@ public class Recuit {
             temperature = mu * temperature;
         }
 
+        System.out.println("Best solution Recuit : " + solutionMin.toString() + " : " + calculSolution(solutionMin));
         return solutionMin;
 
 
