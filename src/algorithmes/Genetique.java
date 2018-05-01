@@ -28,7 +28,6 @@ public class Genetique {
         }
 
         for(int i = 0; i < NBR_ITERATION; i++){
-            //On trie les populations
             Collections.sort(population, (s1, s2) -> {
                 if (distanceTotal(s1 )> distanceTotal(s2))
                     return 1;
@@ -39,7 +38,6 @@ public class Genetique {
 
             List<Double> fitness = new ArrayList<>();
             List<Double> probaListe = new ArrayList<>();
-            Solution fille;
             List<Integer> sommetsPresents ;
 
             double fitnessTotal = 0;
@@ -65,56 +63,35 @@ public class Genetique {
                     probaListe.set(j, probaListe.get(j)/probaTotale);
             }
 
-
-            int m1 = 0, m2 = 0;
-            int k = 0;
-            parentTrouver:
-            for(int j = 0; j < population.size(); j++){
-                double rnd = MethodesUtiles.randomDouble(0,1);
-
-                for(double proba : probaListe){
-                    if(proba > rnd){
-                        if( k > 0) {
-                            m2 = j;
-                            break parentTrouver;
-                        }
-                        else if(k == 0){
-                            m1 = j;
-                            k++;
-                        }
-                    }
-                 }
-            }
-
-            /*List<Solution> newPopulation = new ArrayList<>();
+            List<Solution> newPopulation = new ArrayList<>();
             for(int j = 0; j < population.size(); j++){
                 int index = 0;
                 double rnd = MethodesUtiles.randomDouble(0,1);
                 for(double proba : probaListe){
-                    newPopulation.add(population.get(index));
+                    if(proba > rnd) {
+                        newPopulation.add(population.get(index));
+                        break;
+                    }
+                    index++;
                 }
-                index++;
-            }*/
-
-
-            fille = croisement(population.get(m1), population.get(m2));
-
-            sommetsPresents = new ArrayList<>();
-            for(int j = 0; j < fille.getListeSolution().size(); j++) {
-                if(fille.getListeSolution().get(j) != 0)
-                    sommetsPresents.add(fille.getListeSolution().get(j));
             }
 
-            List<Integer> newSommets;
-            newSommets = getLieuRandom(sommetsPresents);
+            //II- Croisement
+            //population.clear();
+            population =  croisement(newPopulation);
 
-            for(int j = 0; j < newSommets.size(); j++)
-                fille.getListeSolution().add(newSommets.get(j));
+            for(Solution s : population) {
+                sommetsPresents = new ArrayList<>();
+                sommetsPresents.addAll(s.getListeSolution());
+                sommetsPresents.remove(new Integer(0));
 
-            fille = mutation(fille);
+                s.getListeSolution().addAll(getLieuRandom(sommetsPresents));
+            }
 
-            population.add(fille);
-
+            //III - Mutation
+            for(int p = 0; p < population.size(); p++) {
+                population.set(p, mutation(population.get(p)));
+            }
 
             if (i % 1000 == 0) {
                 System.out.println();
@@ -143,45 +120,12 @@ public class Genetique {
                 s = population.get(i);
                 minFitness = fitness;
             }
-            //System.out.println(population.get(i).getListeRoute()+ " : "+fitness);
         }
         System.out.println("Best Solution: "+s.getListeRoute()+" - "+minFitness);
 
         return s.listeToSolution(s.getListeRoute());
     }
 
-    private  Map<Solution, Double> sortSolution(List<Solution> population, List<Double> probaListe){
-        Map<Solution, Double> popProba = new HashMap<>();
-        List<Solution> pop;
-
-        for(int i = 0; i < population.size(); i++)
-            popProba.put(population.get(i), probaListe.get(i));
-
-        List<Map.Entry<Solution, Double>> list =
-                new LinkedList<Map.Entry<Solution, Double>>(popProba.entrySet());
-
-        Collections.sort(list, new Comparator<Map.Entry<Solution, Double>>() {
-            public int compare(Map.Entry<Solution, Double> o1,
-                               Map.Entry<Solution, Double> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
-
-        Map<Solution, Double> sortedMap = new LinkedHashMap<Solution, Double>();
-        for (Map.Entry<Solution, Double> entry : list) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-
-        pop = new ArrayList<Solution>(sortedMap.keySet());
-        /*Iterator it = sortedMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
-        }*/
-        return sortedMap;
-
-    }
 
     /**
      * La mutation consiste d'échanger deux sommets de deux trajets différents,
@@ -271,44 +215,50 @@ public class Genetique {
         return capacite;
     }
 
-    /**
-     * Permet d'effectuer le croisement de l'algo Genetique
-     * @param pere
-     * @param mere
-     * @return
-     */
-    private Solution croisement(Solution pere, Solution mere){
-        pere = sortRoute(pere);
-        mere = sortRoute(mere);
-        List<Integer> routefille = new ArrayList<>();
-        Solution fille = new Solution(routefille);
-        List<Integer> routePere;
-        List<Integer> routeMere;
+    private List<Solution> croisement(List<Solution> population){
+        List<Solution> newPopulation = new ArrayList<>();
 
-        routefille.add(0);
-        finIteration:
-        for(int i = 0; i < pere.getListeRoute().size(); i++){
-            routePere = pere.getListeRoute().get(i);
-
-            for(int j = 0; j < mere.getListeRoute().size(); j++){
-                routeMere = mere.getListeRoute().get(j);
-
-                for(int k = 0; k < routeMere.size(); k++) {
-                    if(routePere.contains(routeMere.get(k)))
-                        break;
-                    if(k == routeMere.size()-1){
-                        routefille.addAll(routePere);
-                        routefille.add(0);
-                        routefille.addAll(routeMere);
-                        break finIteration;
-                    }
-                }
-
+        for(int q = 0; q < population.size(); q++) {
+            Solution pere;
+            Solution mere;
+            if( q < population.size() -1 ) {
+                pere = sortRoute(population.get(q));
+                mere = sortRoute(population.get(q + 1));
             }
-        }
-        return fille;
-    }
+            else{
+                pere = sortRoute(population.get(q));
+                mere = sortRoute(population.get(0));
+            }
+            List<Integer> routefille = new ArrayList<>();
+            Solution fille = new Solution(routefille);
+            List<Integer> routePere;
+            List<Integer> routeMere;
 
+            routefille.add(0);
+            finIteration:
+            for (int i = 0; i < pere.getListeRoute().size(); i++) {
+                routePere = pere.getListeRoute().get(i);
+
+                for (int j = 0; j < mere.getListeRoute().size(); j++) {
+                    routeMere = mere.getListeRoute().get(j);
+
+                    for (int k = 0; k < routeMere.size(); k++) {
+                        if (routePere.contains(routeMere.get(k)))
+                            break;
+                        if (k == routeMere.size() - 1) {
+                            routefille.addAll(routePere);
+                            routefille.add(0);
+                            routefille.addAll(routeMere);
+                            break finIteration;
+                        }
+                    }
+
+                }
+            }
+            newPopulation.add(fille);
+        }
+        return newPopulation;
+    }
     /**
      * Calcul du cout total d'une solution
      * @param sol : Solution dont le coût sera calculé
