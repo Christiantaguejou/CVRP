@@ -118,11 +118,13 @@ public class Recuit {
     }
 
     public boolean quantiteRespectee(Solution solution) {
-
+        System.out.println(solution);
         int capacite = 0;
         for (Integer id : solution.getListeSolution()) {
             if (id == 0) {
+                System.out.println(capacite);
                 if (capacite >100) {
+                    System.out.println("false");
                     return false;
                 }
                 capacite = 0;
@@ -131,6 +133,7 @@ public class Recuit {
                 capacite += lieu.getQuantite();
             }
         }
+        System.out.println("true");
         return true;
     }
 
