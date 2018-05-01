@@ -93,7 +93,6 @@ public class Graphe {
                 itineraire.add(m_lieux.get(0).getId());
             }
         }
-        System.out.println(distanceTotal(solution));
         return solution;
     }
 
