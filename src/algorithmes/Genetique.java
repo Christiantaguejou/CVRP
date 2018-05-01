@@ -8,19 +8,23 @@ import java.util.*;
 
 public class Genetique {
 
-    private static int NBR_ITERATION = 100000;
-    private int NBR_POPULATION = 150;
+    private int NBR_ITERATION ;
+    private int NBR_POPULATION ;
     List<Lieu> m_lieux;
     List<Solution> population;
     Graphe graphe;
 
-    public Genetique(Graphe graphe){
+    public Genetique(Graphe graphe, int nbrIteration, int nbrPopulation){
+        this.NBR_ITERATION = nbrIteration;
+        this.NBR_POPULATION = nbrPopulation;
         this.graphe = graphe;
         m_lieux = graphe.getLieux();
     }
 
     public Solution algoGen(){
 
+        Solution solutionFinale = new Solution();
+        double fitnessFinale = Double.MAX_VALUE;
         population = new ArrayList<>();
 
         for(int i = 0; i < NBR_POPULATION; i++){
@@ -93,21 +97,25 @@ public class Genetique {
                 population.set(p, mutation(population.get(p)));
             }
 
-            if (i % 1000 == 0) {
+            if (i % NBR_POPULATION/100 == 0) {
                 System.out.println();
                 Solution sol;
                 sol = population.get(0);
                 for (Solution solution : population) {
-                    if (distanceTotal(sol) > distanceTotal(solution)) {
+                    if (distanceTotal(sol) > distanceTotal(solution))
                         sol = solution;
+                    if(distanceTotal(sol) < fitnessFinale){
+                        fitnessFinale =  distanceTotal(sol);
+                        solutionFinale = sol;
                     }
                 }
-                System.out.print("Meilleur solution de la population courante : " + distanceTotal(sol));
-                System.out.println(" Génération : " + i);
+                System.out.println("Meilleure Solution apres "+ i*100 +" Génération(s) =>  " + distanceTotal(sol));
             }
-        }
 
-        return bestSolution(population);
+        }
+        System.out.println();
+        System.out.println("Fitness final: "+fitnessFinale);
+        return solutionFinale;
     }
 
     private Solution bestSolution(List<Solution> population){

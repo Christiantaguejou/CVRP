@@ -21,12 +21,11 @@ public class MainTest {
     public static void main(String[] args) {
         Graphe graphe = new Graphe("./data/data01.txt");
 
-        Genetique gen = new Genetique(graphe);
-        System.out.println(gen.algoGen());
+        Genetique gen = new Genetique(graphe, 100, 10000);
+        Solution solutionGen = gen.algoGen();
+        System.out.println(solutionGen.getListeSolution());
 
        //double temperatureInitiale = 40;
-
-        //Solution solutionGen = gen.algoGen();
 
         //System.out.println(graphe.solutionGlouton());
        /* double temperatureInitiale = 165;
