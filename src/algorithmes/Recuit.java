@@ -49,7 +49,7 @@ public class Recuit {
         int n1 = nombreIteration;
         int n2 = nombreIterationAvantChangementTemp;
 
-        for (int k = 0;temperature >= 0.001; k++) {
+        for (int k = 0; k <= n1; k++) {
             for (int l = 1; l <= n2; l++) {
                 Solution solutionY = choisirSolution(solutionXi);
                 double deltaF = calculSolution(solutionY) - calculSolution(solutionXi);
@@ -105,8 +105,8 @@ public class Recuit {
         Integer idTemp = 0, id = 0;
         Iterator iterator = solution.getListeSolution().iterator();
 
+        id = (Integer) iterator.next();
         while (iterator.hasNext()) {
-            id = (Integer) iterator.next();
             if (iterator.hasNext()) {
                 idTemp = (Integer) iterator.next();
                 Lieu lieu1, lieu2;
@@ -114,6 +114,7 @@ public class Recuit {
                 lieu2 = graphe.getLieux().get(idTemp);
                 resultat += graphe.calculDistance(lieu1, lieu2);
             }
+            id = idTemp;
         }
         return resultat;
     }

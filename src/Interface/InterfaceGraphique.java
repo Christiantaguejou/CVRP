@@ -38,7 +38,6 @@ public class InterfaceGraphique extends JFrame{
         Container cp = getContentPane();
         cp.add(canvas);
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);   // Handle the CLOSE button
         setSize(1500,1500);
         setTitle("Graphe solution " + this.title);  // "super" JFrame sets the title
         setVisible(true);    // "super" JFrame show

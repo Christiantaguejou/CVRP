@@ -20,11 +20,10 @@ public class MainTest {
         Genetique gen = new Genetique(graphe);
         Solution solutionGen = gen.algoGen();
 
-        //System.out.println(graphe.solutionGlouton());
         double temperatureInitiale = 165;
         double probabilite = 0.5;
-        int nombreIterationAvantChangementTemp = 60;
-        int nombreIteration = 10;
+        int nombreIterationAvantChangementTemp = 6;
+        int nombreIteration = 1000000;
         double mu = 0.5;
 
         Recuit recuit = new Recuit(
