@@ -22,21 +22,34 @@ public class InterfaceGraphique extends JFrame{
     // which is an inner class called DrawCanvas extending javax.swing.JPanel.
     private DrawCanvas canvas;
     private Solution solution;
+    private double coutSolution;
     private Graphe graphe;
     private String title;
 
     // Constructor to set up the GUI components and event handlers
-    public InterfaceGraphique(Solution solution, Graphe graphe, String title) {
+    public InterfaceGraphique(Solution solution, Graphe graphe, String title,double coutSolution) {
         this.solution = solution;
         this.graphe = graphe;
         this.title = title;
+        this.coutSolution = coutSolution;
+        JPanel jPanel = new JPanel();
 
         canvas = new DrawCanvas();    // Construct the drawing canvas
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+        JLabel label1 = new JLabel("Coût de cette solution: " + coutSolution);
+        JLabel label2 = new JLabel("Chemin: " + solution);
+
+        jPanel.setLayout(new GridLayout(2,1));
+        jPanel.add(label1);
+        jPanel.add(label2);
+        
 
         // Set the Drawing JPanel as the JFrame's content-pane
         Container cp = getContentPane();
+        cp.setLayout(new GridLayout(1,2));
         cp.add(canvas);
+        cp.add(jPanel);
+
 
         setSize(1500,1500);
         setTitle("Graphe solution " + this.title);  // "super" JFrame sets the title
@@ -71,13 +84,13 @@ public class InterfaceGraphique extends JFrame{
                         g.setColor(color);
                     }
                     
-                    g.drawLine(lieu.getCoordonnees().getX()*10,
-                            lieu.getCoordonnees().getY()*10,
-                            lieu2.getCoordonnees().getX()*10,
-                            lieu2.getCoordonnees().getY()*10
+                    g.drawLine(lieu.getCoordonnees().getX()*7,
+                            lieu.getCoordonnees().getY()*7,
+                            lieu2.getCoordonnees().getX()*7,
+                            lieu2.getCoordonnees().getY()*7
                     );
                     lieu = lieu2;
-                    g.drawString("" + lieu.getId(),lieu.getCoordonnees().getX()*10 + 5,lieu.getCoordonnees().getY()*10 + 5);
+                    g.drawString("" + lieu.getId(),lieu.getCoordonnees().getX()*7 + 5,lieu.getCoordonnees().getY()*7 + 5);
                 }
             }
 

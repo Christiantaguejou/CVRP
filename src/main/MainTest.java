@@ -64,15 +64,15 @@ public class MainTest implements ActionListener {
 
         // Run the GUI codes on the Event-Dispatching thread for thread safety
         Solution finalSolutionRecuit = solutionRecuit;
-        Solution finalSolutionGen1 = solutionGen;
+        Solution finalSolutionGen = solutionGen;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
 
                 if (jbAlgo.getName().equals("Gen")) {
-                    new InterfaceGraphique(finalSolutionGen1, graphe, "algorithme Genetique");
+                    new InterfaceGraphique(finalSolutionGen, graphe, "algorithme Genetique",gen.distanceTotal(finalSolutionGen));
                 } else {
-                    new InterfaceGraphique(finalSolutionRecuit, graphe, "algorithme recuit simule");
+                    new InterfaceGraphique(finalSolutionRecuit, graphe, "algorithme recuit simule",recuit.calculSolution(finalSolutionRecuit));
                 }
             }
 
