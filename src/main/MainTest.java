@@ -21,10 +21,10 @@ public class MainTest {
         Solution solutionGen = gen.algoGen();
 
         double temperatureInitiale = 165;
-        double probabilite = 0.5;
+        double probabilite = 0.9;
         int nombreIterationAvantChangementTemp = 6;
         int nombreIteration = 1000000;
-        double mu = 0.5;
+        double mu = 0.99;
 
         Recuit recuit = new Recuit(
                 graphe,
