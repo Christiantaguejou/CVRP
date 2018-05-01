@@ -212,19 +212,20 @@ public class Genetique {
         Solution fille = new Solution(routefille);
         List<Integer> routePere;
         List<Integer> routeMere;
-
+        Solution p = sortRoute(pere);
+        Solution m = sortRoute(mere);
         routefille.add(0);
         finIteration:
-        for(int i = 0; i < pere.getListeRoute().size(); i++){
+        for(int i = 0; i < p.getListeRoute().size(); i++){
             List<Integer> exceptRoutePere = new ArrayList<>();
-            int rndPere = MethodesUtiles.randomValeur(exceptRoutePere, pere.getListeRoute().size());
-            routePere = pere.getListeRoute().get(rndPere);
+            int rndPere = MethodesUtiles.randomValeur(exceptRoutePere, p.getListeRoute().size());
+            routePere = p.getListeRoute().get(rndPere);
             exceptRoutePere.add(rndPere);
 
-            for(int j = 0; j < mere.getListeRoute().size(); j++){
+            for(int j = 0; j < m.getListeRoute().size(); j++){
                 List<Integer> exceptRouteMere = new ArrayList<>();
-                int rndMere = MethodesUtiles.randomValeur(exceptRouteMere, mere.getListeRoute().size());
-                routeMere = mere.getListeRoute().get(rndMere);
+                int rndMere = MethodesUtiles.randomValeur(exceptRouteMere, m.getListeRoute().size());
+                routeMere = m.getListeRoute().get(rndMere);
                 exceptRouteMere.add(rndMere);
 
                 for(int k = 0; k < routeMere.size(); k++) {
@@ -233,6 +234,7 @@ public class Genetique {
                     if(k == routeMere.size()-1){
                         routefille.addAll(routePere);
                         routefille.add(0);
+                        routefille.add(0);
                         routefille.addAll(routeMere);
                         break finIteration;
                     }
@@ -240,53 +242,10 @@ public class Genetique {
 
             }
         }
+        routefille.add(0);
         return fille;
     }
-    /*
-    private List<Solution> croisement(List<Solution> population){
-        List<Solution> newPopulation = new ArrayList<>();
 
-        for(int q = 0; q < population.size(); q++) {
-            Solution pere;
-            Solution mere;
-            if( q < population.size() -1 ) {
-                pere = sortRoute(population.get(q));
-                mere = sortRoute(population.get(q + 1));
-            }
-            else{
-                pere = sortRoute(population.get(q));
-                mere = sortRoute(population.get(0));
-            }
-            List<Integer> routefille = new ArrayList<>();
-            Solution fille = new Solution(routefille);
-            List<Integer> routePere;
-            List<Integer> routeMere;
-
-            routefille.add(0);
-            finIteration:
-            for (int i = 0; i < pere.getListeRoute().size(); i++) {
-                routePere = pere.getListeRoute().get(i);
-
-                for (int j = 0; j < mere.getListeRoute().size(); j++) {
-                    routeMere = mere.getListeRoute().get(j);
-
-                    for (int k = 0; k < routeMere.size(); k++) {
-                        if (routePere.contains(routeMere.get(k)))
-                            break;
-                        if (k == routeMere.size() - 1) {
-                            routefille.addAll(routePere);
-                            routefille.add(0);
-                            routefille.addAll(routeMere);
-                            break finIteration;
-                        }
-                    }
-
-                }
-            }
-            newPopulation.add(fille);
-        }
-        return newPopulation;
-    }*/
     /**
      * Calcul du cout total d'une solution
      * @param sol : Solution dont le coût sera calculé
@@ -380,12 +339,14 @@ public class Genetique {
                     itineraire.add(rnd);
                     if(capacite == 100) {
                         itineraire.add(0);
+                        itineraire.add(0);
                         capacite = 0;
                     }
                 }
                 else if(capacite > Graphe.CAPACITE_MAX && !itineraire.contains(rnd)){
                     capacite = 0;
                     if(iter <= m_lieux.size() - i){
+                        itineraire.add(0);
                         itineraire.add(0);
                         capacite = m_lieux.get(rnd).getQuantite();
                         iter = 0;
