@@ -1,30 +1,52 @@
 package main;
 
 import Interface.InterfaceGraphique;
+import Interface.Menu;
 import algorithmes.Genetique;
 import algorithmes.Recuit;
 import metier.Graphe;
 import metier.Solution;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 
 /**
  * Created by tardy on 07/03/2018.
  */
-public class MainTest {
+public class MainTest implements ActionListener {
+
+    private static Menu menu;
+    private double temperatureInitiale;
+    private double probabilite;
+    private int nombreIterationAvantChangementTemp;
+    private int nombreIteration;
+    private double mu;
 
     public static void main(String[] args) {
+
+        menu = new  Menu();
+
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("couou");
+        System.out.println(e.getModifiers());
+        System.out.println();
+
         Graphe graphe = new Graphe("./data/data01.txt");
 
         Genetique gen = new Genetique(graphe);
         Solution solutionGen = gen.algoGen();
 
-        double temperatureInitiale = 165;
-        double probabilite = 0.9;
-        int nombreIterationAvantChangementTemp = 6;
-        int nombreIteration = 1000000;
-        double mu = 0.99;
+        temperatureInitiale = Double.parseDouble(menu.jtfTemp.getText());
+        probabilite = Double.parseDouble(menu.jtfProba.getText());
+        nombreIterationAvantChangementTemp = Integer.parseInt(menu.jtfNbIteAvtChgtTemp.getText());
+        nombreIteration = Integer.parseInt(menu.jtfNbIteration.getText());
+        mu = Double.parseDouble(menu.jtfMu.getText());
 
         Recuit recuit = new Recuit(
                 graphe,
@@ -44,6 +66,5 @@ public class MainTest {
                 new InterfaceGraphique(solutionRecuit, graphe,"algorithme recuit simule"); // Let the constructor do the job
             }
         });
-
     }
 }
