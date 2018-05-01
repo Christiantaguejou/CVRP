@@ -18,9 +18,10 @@ public class MainTest {
         Graphe graphe = new Graphe("./data/data01.txt");
 
         Genetique gen = new Genetique(graphe);
-        gen.algoGen();
+        Solution solutionGen = gen.algoGen();
+
         //System.out.println(graphe.solutionGlouton());
-       /*double temperatureInitiale = 40;
+        double temperatureInitiale = 40;
         double probabilite = 0.5;
         int nombreIterationAvantChangementTemp = 60;
         int nombreIteration = 10;
@@ -34,15 +35,16 @@ public class MainTest {
                 nombreIteration,
                 mu
         );
-        Solution solution = recuit.run();
+        Solution solutionRecuit = recuit.run();
 
         // Run the GUI codes on the Event-Dispatching thread for thread safety
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new InterfaceGraphique(solution, graphe); // Let the constructor do the job
+                new InterfaceGraphique(solutionGen, graphe,"algorithme genetique"); // Let the constructor do the job
+                new InterfaceGraphique(solutionRecuit, graphe,"algorithme recuit simule"); // Let the constructor do the job
             }
-        });*/
+        });
 
     }
 }

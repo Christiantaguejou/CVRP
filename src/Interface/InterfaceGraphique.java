@@ -23,11 +23,13 @@ public class InterfaceGraphique extends JFrame{
     private DrawCanvas canvas;
     private Solution solution;
     private Graphe graphe;
+    private String title;
 
     // Constructor to set up the GUI components and event handlers
-    public InterfaceGraphique(Solution solution, Graphe graphe) {
+    public InterfaceGraphique(Solution solution, Graphe graphe, String title) {
         this.solution = solution;
         this.graphe = graphe;
+        this.title = title;
 
         canvas = new DrawCanvas();    // Construct the drawing canvas
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -38,7 +40,7 @@ public class InterfaceGraphique extends JFrame{
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);   // Handle the CLOSE button
         setSize(1500,1500);
-        setTitle("Graphe solution");  // "super" JFrame sets the title
+        setTitle("Graphe solution " + this.title);  // "super" JFrame sets the title
         setVisible(true);    // "super" JFrame show
     }
 

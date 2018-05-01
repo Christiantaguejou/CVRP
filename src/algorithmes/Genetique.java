@@ -21,7 +21,7 @@ public class Genetique {
         m_lieux = graphe.getLieux();
     }
 
-    public void algoGen(){
+    public Solution algoGen(){
 
         population = new ArrayList<>();
 
@@ -90,10 +90,10 @@ public class Genetique {
             population.add(fille);
         }
 
-        bestSolution(population);
+        return bestSolution(population);
     }
 
-    private void bestSolution(List<Solution> population){
+    private Solution bestSolution(List<Solution> population){
         double  fitness, minFitness = Integer.MAX_VALUE;
         Solution s = new Solution();
 
@@ -107,6 +107,7 @@ public class Genetique {
         }
         System.out.println("Best Solution: "+s.getListeRoute()+" - "+minFitness);
 
+        return s.listeToSolution(s.getListeRoute());
     }
 
     /**
