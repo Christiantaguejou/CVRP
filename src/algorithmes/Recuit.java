@@ -72,6 +72,7 @@ public class Recuit {
             temperature = mu * temperature;
         }
 
+        System.out.println("Best solution Recuit : " + solutionMin.toString() + " : " + calculSolution(solutionMin));
         return solutionMin;
 
 
@@ -119,7 +120,6 @@ public class Recuit {
     }
 
     public boolean quantiteRespectee(Solution solution) {
-
         int capacite = 0;
         for (Integer id : solution.getListeSolution()) {
             if (id == 0) {

@@ -59,7 +59,7 @@ public class MethodesUtiles {
         return rnd;
     }
 
-    public static double randomDouble(double rangeMax, double rangeMin){
+    public static double randomDouble(double rangeMin, double rangeMax){
         Random r = new Random();
         double randomValue = rangeMin  + (rangeMax - rangeMin) * r.nextDouble();
         return randomValue;

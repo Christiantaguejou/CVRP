@@ -11,7 +11,7 @@ public class Solution {
     private List<Integer> listeSolution;
 
     public Solution(){
-
+        this.listeSolution = new ArrayList<>();
     }
 
     public Solution(List<Integer> listeSolution) {
@@ -61,5 +61,23 @@ public class Solution {
             listeId.append(listeSolution.get(i)+" ");
         }
         return listeId.toString();
+    }
+
+    public void addNoeud(int id) {
+        this.listeSolution.add(id);
+    }
+
+
+    public Solution listeToSolution(List<ArrayList<Integer>> liste) {
+        Solution solution = new Solution();
+
+        for (List<Integer> listeInteger: liste) {
+            for (Integer integer: listeInteger) {
+                solution.addNoeud(integer);
+            }
+            solution.addNoeud(0);
+            solution.addNoeud(0);
+        }
+        return solution;
     }
 }

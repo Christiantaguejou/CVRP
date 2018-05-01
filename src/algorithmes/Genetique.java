@@ -8,8 +8,8 @@ import java.util.*;
 
 public class Genetique {
 
-    private static int NBR_ITERATION = 10;
-    private int NBR_POPULATION = 2;
+    private static int NBR_ITERATION = 100000;
+    private int NBR_POPULATION = 150;
     List<Lieu> m_lieux;
     List<Solution> population;
     Graphe graphe;
@@ -19,16 +19,24 @@ public class Genetique {
         m_lieux = graphe.getLieux();
     }
 
-    public void algoGen(){
-        List<Solution> filles = new ArrayList<>();
+    public Solution algoGen(){
+
         population = new ArrayList<>();
 
         for(int i = 0; i < NBR_POPULATION; i++){
             population.add(new Solution(getLieuRandom(new ArrayList<>())));
-
         }
 
         for(int i = 0; i < NBR_ITERATION; i++){
+            //On trie les populations
+            Collections.sort(population, (s1, s2) -> {
+                if (distanceTotal(s1 )> distanceTotal(s2))
+                    return 1;
+                if (distanceTotal(s1) < distanceTotal(s2))
+                    return -1;
+                return 0;
+            });
+
             List<Double> fitness = new ArrayList<>();
             List<Double> probaListe = new ArrayList<>();
             Solution fille;
@@ -37,56 +45,58 @@ public class Genetique {
             double fitnessTotal = 0;
             double probaTotale = 0;
 
+            //I - Reproduction
             for(int j = 0; j < population.size(); j++){
                 fitnessTotal += distanceTotal(population.get(j));
                 fitness.add(distanceTotal(population.get(j)));
             }
 
-            //Probabilité de chaque solution
             probaListe.addAll(fitness);
             for(int j = 0; j < population.size(); j++){
-                probaListe.set(j, fitness.get(j)/fitnessTotal);
+                double proba = fitness.get(j) / fitnessTotal;
+                probaListe.set(j, 1 - proba);
+                probaTotale += 1 - proba;
             }
-            for(int j = 0; j < probaListe.size(); j++){
-                probaListe.set(j, 1-probaListe.get(j));
-                probaTotale += probaListe.get(j);
-            }
+
             for(int j = 0; j < population.size(); j++){
-                probaListe.set(j, probaListe.get(j)/probaTotale);
+                if( j > 0)
+                    probaListe.set(j, probaListe.get(j-1) + probaListe.get(j)/probaTotale);
+                else
+                    probaListe.set(j, probaListe.get(j)/probaTotale);
             }
 
-            System.out.println(probaListe);
 
-            //int p1 = probaListe.get(MethodesUtiles.randomVal(new ArrayList<>(), probaListe.size()));
-            //int p2 = probaListe.get(MethodesUtiles.randomVal(new ArrayList<>(), probaListe.size()));
-
-
-            /* for(int j = 0; j < probaListe.size(); j++){
-                probaListe.set(j, 1-probaListe.get(j));
-                probaTotale += probaListe.get(j);
-            }
+            int m1 = 0, m2 = 0;
+            int k = 0;
+            parentTrouver:
             for(int j = 0; j < population.size(); j++){
-                probaListe.set(j, probaListe.get(j)/probaTotale);
+                double rnd = MethodesUtiles.randomDouble(0,1);
+
+                for(double proba : probaListe){
+                    if(proba > rnd){
+                        if( k > 0) {
+                            m2 = j;
+                            break parentTrouver;
+                        }
+                        else if(k == 0){
+                            m1 = j;
+                            k++;
+                        }
+                    }
+                 }
+            }
+
+            /*List<Solution> newPopulation = new ArrayList<>();
+            for(int j = 0; j < population.size(); j++){
+                int index = 0;
+                double rnd = MethodesUtiles.randomDouble(0,1);
+                for(double proba : probaListe){
+                    newPopulation.add(population.get(index));
+                }
+                index++;
             }*/
 
-           // population = sortSolution(population, probaListe);
 
-            //Determination des meilleurs solutions & Croisement
-            int m1 = 0, m2 = 0;
-            double max1 = 0, max2 = 0;
-
-            for(int j = 0; j < population.size(); j++){
-                if(max1 < probaListe.get(j)) {
-                    max2 = max1;
-                    m2 = m1;
-                    max1 = probaListe.get(j);
-                    m1 = j;
-                }
-                else if(max2 < probaListe.get(j)) {
-                    max2 = probaListe.get(j);
-                    m2 = j;
-                }
-            }
             fille = croisement(population.get(m1), population.get(m2));
 
             sommetsPresents = new ArrayList<>();
@@ -106,7 +116,7 @@ public class Genetique {
             population.add(fille);
 
 
-            /*if (i % 1000 == 0) {
+            if (i % 1000 == 0) {
                 System.out.println();
                 Solution sol;
                 sol = population.get(0);
@@ -117,13 +127,13 @@ public class Genetique {
                 }
                 System.out.print("Meilleur solution de la population courante : " + distanceTotal(sol));
                 System.out.println(" Génération : " + i);
-            }*/
+            }
         }
 
-        bestSolution(population);
+        return bestSolution(population);
     }
 
-    private void bestSolution(List<Solution> population){
+    private Solution bestSolution(List<Solution> population){
         double  fitness, minFitness = Integer.MAX_VALUE;
         Solution s = new Solution();
 
@@ -136,6 +146,40 @@ public class Genetique {
             //System.out.println(population.get(i).getListeRoute()+ " : "+fitness);
         }
         System.out.println("Best Solution: "+s.getListeRoute()+" - "+minFitness);
+
+        return s.listeToSolution(s.getListeRoute());
+    }
+
+    private  Map<Solution, Double> sortSolution(List<Solution> population, List<Double> probaListe){
+        Map<Solution, Double> popProba = new HashMap<>();
+        List<Solution> pop;
+
+        for(int i = 0; i < population.size(); i++)
+            popProba.put(population.get(i), probaListe.get(i));
+
+        List<Map.Entry<Solution, Double>> list =
+                new LinkedList<Map.Entry<Solution, Double>>(popProba.entrySet());
+
+        Collections.sort(list, new Comparator<Map.Entry<Solution, Double>>() {
+            public int compare(Map.Entry<Solution, Double> o1,
+                               Map.Entry<Solution, Double> o2) {
+                return (o2.getValue()).compareTo(o1.getValue());
+            }
+        });
+
+        Map<Solution, Double> sortedMap = new LinkedHashMap<Solution, Double>();
+        for (Map.Entry<Solution, Double> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        pop = new ArrayList<Solution>(sortedMap.keySet());
+        /*Iterator it = sortedMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+            it.remove(); // avoids a ConcurrentModificationException
+        }*/
+        return sortedMap;
 
     }
 
