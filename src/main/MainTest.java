@@ -22,13 +22,6 @@ import java.util.Random;
 public class MainTest implements ActionListener {
 
     private static Menu menu;
-    private double temperatureInitiale;
-    private double probabilite;
-    private int nombreIterationAvantChangementTemp;
-    private int nombreIterationRecuit;
-    private int nombreIterationGen;
-    private int nombrePopulation;
-    private double mu;
 
     public static void main(String[] args) {
 
@@ -40,13 +33,13 @@ public class MainTest implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String file = menu.selectedRadioButton.getText();
-        temperatureInitiale = Double.parseDouble(menu.jtfTemp.getText());
-        probabilite = Double.parseDouble(menu.jtfProba.getText());
-        nombreIterationAvantChangementTemp = Integer.parseInt(menu.jtfNbIteAvtChgtTemp.getText());
-        nombreIterationRecuit = Integer.parseInt(menu.jtfNbIterationRecuit.getText());
-        mu = Double.parseDouble(menu.jtfMu.getText());
-        nombreIterationGen = Integer.parseInt(menu.jtfNbIterationGen.getText());
-        nombrePopulation = Integer.parseInt(menu.jtfNbPopulation.getText());
+        double temperatureInitiale = Double.parseDouble(menu.jtfTemp.getText());
+        double probabilite = Double.parseDouble(menu.jtfProba.getText());
+        int nombreIterationAvantChangementTemp = Integer.parseInt(menu.jtfNbIteAvtChgtTemp.getText());
+        int nombreIterationRecuit = Integer.parseInt(menu.jtfNbIterationRecuit.getText());
+        double mu = Double.parseDouble(menu.jtfMu.getText());
+        int nombreIterationGen = Integer.parseInt(menu.jtfNbIterationGen.getText());
+        int nombrePopulation = Integer.parseInt(menu.jtfNbPopulation.getText());
 
 
         Graphe graphe = new Graphe("./data/"+ file + ".txt");
@@ -57,7 +50,7 @@ public class MainTest implements ActionListener {
                 temperatureInitiale,
                 probabilite,
                 nombreIterationAvantChangementTemp,
-                nombreIterationGen,
+                nombreIterationRecuit,
                 mu
         );
         Solution solutionGen = gen.algoGen();
