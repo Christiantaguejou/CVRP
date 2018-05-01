@@ -25,7 +25,9 @@ public class MainTest implements ActionListener {
     private double temperatureInitiale;
     private double probabilite;
     private int nombreIterationAvantChangementTemp;
-    private int nombreIteration;
+    private int nombreIterationRecuit;
+    private int nombreIterationGen;
+    private int nombrePopulation;
     private double mu;
 
     public static void main(String[] args) {
@@ -37,54 +39,41 @@ public class MainTest implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("couou");
-        System.out.println(e.getModifiers());
-        System.out.println();
-        String file = menu.jrb1.isSelected() ? menu.jrb1.getText():
-                menu.jrb2.isSelected() ? menu.jrb2.getText():
-                        menu.jrb3.isSelected() ? menu.jrb3.getText():
-                                menu.jrb4.isSelected() ? menu.jrb4.getText():
-                                        menu.jrb5.isSelected() ? menu.jrb5.getText():"";
-        Graphe graphe = new Graphe("./data/"+ file + ".txt");
-
-        Genetique gen = new Genetique(graphe, 100, 10000);
-        Solution solutionGen = gen.algoGen();
-        System.out.println(solutionGen.getListeSolution());
-
-       //double temperatureInitiale = 40;
-
-        //System.out.println(graphe.solutionGlouton());
-       /* double temperatureInitiale = 165;
-        double probabilite = 0.5;
-        int nombreIterationAvantChangementTemp = 60;
-        int nombreIteration = 10;
-        double mu = 0.5;
-
+        String file = menu.selectedRadioButton.getText();
         temperatureInitiale = Double.parseDouble(menu.jtfTemp.getText());
         probabilite = Double.parseDouble(menu.jtfProba.getText());
         nombreIterationAvantChangementTemp = Integer.parseInt(menu.jtfNbIteAvtChgtTemp.getText());
-        nombreIteration = Integer.parseInt(menu.jtfNbIteration.getText());
+        nombreIterationRecuit = Integer.parseInt(menu.jtfNbIterationRecuit.getText());
         mu = Double.parseDouble(menu.jtfMu.getText());
+        nombreIterationGen = Integer.parseInt(menu.jtfNbIterationGen.getText());
+        nombrePopulation = Integer.parseInt(menu.jtfNbPopulation.getText());
 
+
+        Graphe graphe = new Graphe("./data/"+ file + ".txt");
+
+        Genetique gen = new Genetique(graphe, nombreIterationGen, nombrePopulation);
         Recuit recuit = new Recuit(
                 graphe,
                 temperatureInitiale,
                 probabilite,
                 nombreIterationAvantChangementTemp,
-                nombreIteration,
+                nombreIterationGen,
                 mu
         );
+        Solution solutionGen = gen.algoGen();
+        System.out.println(solutionGen);
+
         Solution solutionRecuit = recuit.run();
 
         // Run the GUI codes on the Event-Dispatching thread for thread safety
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //new InterfaceGraphique(solutionGen, graphe,"algorithme genetique"); // Let the constructor do the job
-                new InterfaceGraphique(solutionRecuit, graphe,"algorithme recuit simule"); // Let the constructor do the job
+                new InterfaceGraphique(solutionRecuit, graphe,"algorithme recuit simule");
+                new InterfaceGraphique(solutionGen, graphe,"algorithme Genetique");
             }
 
-        });*/
+        });
     }
 
 }

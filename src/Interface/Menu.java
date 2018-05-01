@@ -4,6 +4,7 @@ import main.MainTest;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,18 +15,22 @@ import java.awt.event.ActionListener;
 public class Menu extends JFrame {
 
     private JPanel pan = new JPanel();
+    public JRadioButton selectedRadioButton;
     private JButton boutonLancer = new JButton("Lancer");
     public JTextField jtfTemp = new JTextField("165");
     private JLabel labelTemp = new JLabel("Température initiale");
     public JTextField jtfProba = new JTextField("0.9");
     private JLabel labelProba = new JLabel("Probabilité");
-    public JTextField jtfNbIteration = new JTextField("1000000");
-    private JLabel labelNbIteration = new JLabel("Nombre iteration");
+    public JTextField jtfNbIterationRecuit = new JTextField("1000000");
+    private JLabel labelNbIterationRecuit = new JLabel("Nombre iteration");
     public JTextField jtfNbIteAvtChgtTemp = new JTextField("6");
     private JLabel labelNbIteAvtChgtTemp = new JLabel("Nombre iteration avant changement de température");
     public JTextField jtfMu = new JTextField("0.99");
     private JLabel labelMu = new JLabel("Mu");
-    private JTextField textRecuit = new JTextField("Recuit");
+    public JTextField jtfNbIterationGen = new JTextField("100");
+    private JLabel labelNbIterationGen = new JLabel("Nombre itérations");
+    public JTextField jtfNbPopulation = new JTextField("10000");
+    private JLabel labelNbPopulation = new JLabel("Nombre population");
     private JLabel labelFichier = new JLabel("Fichier");
     public JRadioButton jrb1 = new JRadioButton("data01");
     public JRadioButton jrb2 = new JRadioButton("data02");
@@ -43,11 +48,33 @@ public class Menu extends JFrame {
         this.setLayout(new BorderLayout());
         boutonLancer.addActionListener(new MainTest());
         this.getContentPane().add(boutonLancer, BorderLayout.SOUTH);
-        JPanel formCenter = new JPanel();
+        JPanel formCenterRecuit = new JPanel();
         JPanel formNorth = new JPanel();
+        JPanel formCenter = new JPanel();
+        JPanel formCenterGen = new JPanel();
         Font police = new Font("Arial", Font.BOLD, 14);
+        Font title = new Font("Arial", Font.BOLD, 20);
+
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        TitledBorder titleRecuit = BorderFactory.createTitledBorder(
+                blackline, "Recuit",0,0,title);
+        titleRecuit.setTitleJustification(TitledBorder.CENTER);
+        formCenterRecuit.setBorder(titleRecuit);
+
+        TitledBorder titleGen = BorderFactory.createTitledBorder(
+                blackline, "Genenetique",0,0,title);
+        titleGen.setTitleJustification(TitledBorder.CENTER);
+        formCenterGen.setBorder(titleGen);
 
         //declaration formNorth
+
+        jrb1.setSelected(true);
+        selectedRadioButton = jrb1;
+        jrb1.addActionListener(new StateListener());
+        jrb2.addActionListener(new StateListener());
+        jrb3.addActionListener(new StateListener());
+        jrb4.addActionListener(new StateListener());
+        jrb5.addActionListener(new StateListener());
 
         formNorth.add(labelFichier);
         formNorth.add(jrb1);
@@ -57,7 +84,7 @@ public class Menu extends JFrame {
         formNorth.add(jrb5);
         this.add(formNorth,BorderLayout.NORTH);
 
-        formCenter.setLayout(new GridLayout(6,1,0,5));
+        formCenterRecuit.setLayout(new GridLayout(6,1,0,5));
         //declaration form
         jtfTemp.setFont(police);
         jtfTemp.setPreferredSize(new Dimension(150, 30));
@@ -65,28 +92,56 @@ public class Menu extends JFrame {
         jtfProba.setFont(police);
         jtfProba.setPreferredSize(new Dimension(150, 30));
         jtfProba.setForeground(Color.BLUE);
-        jtfNbIteration.setFont(police);
-        jtfNbIteration.setPreferredSize(new Dimension(150, 30));
-        jtfNbIteration.setForeground(Color.BLUE);
+        jtfNbIterationRecuit.setFont(police);
+        jtfNbIterationRecuit.setPreferredSize(new Dimension(150, 30));
+        jtfNbIterationRecuit.setForeground(Color.BLUE);
         jtfNbIteAvtChgtTemp.setFont(police);
         jtfNbIteAvtChgtTemp.setPreferredSize(new Dimension(150, 30));
         jtfNbIteAvtChgtTemp.setForeground(Color.BLUE);
         jtfMu.setFont(police);
         jtfMu.setPreferredSize(new Dimension(150, 30));
         jtfMu.setForeground(Color.BLUE);
-        formCenter.add(labelTemp);
-        formCenter.add(jtfTemp);
-        formCenter.add(labelProba);
-        formCenter.add(jtfProba);
-        formCenter.add(labelNbIteration);
-        formCenter.add(jtfNbIteration);
-        formCenter.add(labelNbIteAvtChgtTemp);
-        formCenter.add(jtfNbIteAvtChgtTemp);
-        formCenter.add(labelMu);
-        formCenter.add(jtfMu);
+        formCenterRecuit.add(labelTemp);
+        formCenterRecuit.add(jtfTemp);
+        formCenterRecuit.add(labelProba);
+        formCenterRecuit.add(jtfProba);
+        formCenterRecuit.add(labelNbIterationRecuit);
+        formCenterRecuit.add(jtfNbIterationRecuit);
+        formCenterRecuit.add(labelNbIteAvtChgtTemp);
+        formCenterRecuit.add(jtfNbIteAvtChgtTemp);
+        formCenterRecuit.add(labelMu);
+        formCenterRecuit.add(jtfMu);
+
+        formCenterGen.setLayout(new GridLayout(2,1,0,5));
+        jtfNbIterationGen.setFont(police);
+        jtfNbIterationGen.setPreferredSize(new Dimension(150, 30));
+        jtfNbIterationGen.setForeground(Color.BLUE);
+        jtfNbPopulation.setFont(police);
+        jtfNbPopulation.setPreferredSize(new Dimension(150, 30));
+        jtfNbPopulation.setForeground(Color.BLUE);
+        formCenterGen.add(labelNbIterationGen);
+        formCenterGen.add(jtfNbIterationGen);
+        formCenterGen.add(labelNbPopulation);
+        formCenterGen.add(jtfNbPopulation);
+
+
+        formCenter.setLayout(new GridLayout(2,1));
+        formCenter.add(formCenterRecuit);
+        formCenter.add(formCenterGen);
+
         pan.add(formCenter, BorderLayout.CENTER);
 
         this.setContentPane(pan);
         this.setVisible(true);
+    }
+
+    private class StateListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (selectedRadioButton != null) {
+                selectedRadioButton.setSelected(false);
+            }
+            selectedRadioButton = (JRadioButton) e.getSource();
+        }
     }
 }

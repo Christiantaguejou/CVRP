@@ -116,7 +116,6 @@ public class Recuit {
             }
             id = idTemp;
         }
-        System.out.println(resultat);
         return resultat;
     }
 
