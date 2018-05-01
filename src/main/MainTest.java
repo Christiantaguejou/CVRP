@@ -36,8 +36,12 @@ public class MainTest implements ActionListener {
         System.out.println("couou");
         System.out.println(e.getModifiers());
         System.out.println();
-
-        Graphe graphe = new Graphe("./data/data01.txt");
+        String file = menu.jrb1.isSelected() ? menu.jrb1.getText():
+                menu.jrb2.isSelected() ? menu.jrb2.getText():
+                        menu.jrb3.isSelected() ? menu.jrb3.getText():
+                                menu.jrb4.isSelected() ? menu.jrb4.getText():
+                                        menu.jrb5.isSelected() ? menu.jrb5.getText():"";
+        Graphe graphe = new Graphe("./data/"+ file + ".txt");
 
         Genetique gen = new Genetique(graphe);
         Solution solutionGen = gen.algoGen();
