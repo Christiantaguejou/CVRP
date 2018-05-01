@@ -1,11 +1,13 @@
 package main;
 
 import Interface.InterfaceGraphique;
+import algorithmes.Genetique;
 import algorithmes.Recuit;
 import metier.Graphe;
 import metier.Solution;
 
 import javax.swing.*;
+import java.util.Random;
 
 /**
  * Created by tardy on 07/03/2018.
@@ -15,7 +17,10 @@ public class MainTest {
     public static void main(String[] args) {
         Graphe graphe = new Graphe("./data/data01.txt");
 
-        double temperatureInitiale = 40;
+        Genetique gen = new Genetique(graphe);
+        gen.algoGen();
+        //System.out.println(graphe.solutionGlouton());
+       /*double temperatureInitiale = 40;
         double probabilite = 0.5;
         int nombreIterationAvantChangementTemp = 60;
         int nombreIteration = 10;
@@ -37,7 +42,7 @@ public class MainTest {
             public void run() {
                 new InterfaceGraphique(solution, graphe); // Let the constructor do the job
             }
-        });
+        });*/
 
     }
 }

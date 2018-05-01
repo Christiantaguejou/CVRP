@@ -13,6 +13,7 @@ import java.util.List;
 public class Graphe {
 
     private List<Lieu> m_lieux;
+    public static int CAPACITE_MAX = 100;
 
     public Graphe(String chemin) {
         this.m_lieux = this.populer(chemin);
@@ -25,8 +26,6 @@ public class Graphe {
     public void setLieux(List<Lieu> lieux) {
         this.m_lieux = lieux;
     }
-
-
 
     public List<Lieu> populer(String chemin) {
         List<Lieu> lieux = new ArrayList<>();
@@ -58,7 +57,7 @@ public class Graphe {
         return lieux;
     }
 
-    public float calculDistance(Lieu lieu1, Lieu lieu2) {
+    public static float calculDistance(Lieu lieu1, Lieu lieu2) {
         Coordonnees coordonneesLieu1 = lieu1.getCoordonnees();
         Coordonnees coordonneesLieu2 = lieu2.getCoordonnees();
         return (float) Math.sqrt(
@@ -94,6 +93,18 @@ public class Graphe {
                 itineraire.add(m_lieux.get(0).getId());
             }
         }
+        System.out.println(distanceTotal(solution));
         return solution;
+    }
+
+    public double distanceTotal(Solution sol){
+        double distanceTotal = 0;
+
+        for(int i = 0; i <= m_lieux.size()-2; i++){
+            distanceTotal += Graphe.calculDistance(m_lieux.get(sol.getListeSolution().get(i)),
+                    m_lieux.get(sol.getListeSolution().get(i+1)));
+        }
+
+        return distanceTotal;
     }
 }
