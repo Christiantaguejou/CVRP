@@ -16,7 +16,8 @@ public class Menu extends JFrame {
 
     private JPanel pan = new JPanel();
     public JRadioButton selectedRadioButton;
-    private JButton boutonLancer = new JButton("Lancer");
+    private JButton boutonLancerRecuit = new JButton("Lancer l'algorithme de Recuit");
+    private JButton boutonLancerGen = new JButton("Lancer l'algorithme génétique");
     public JTextField jtfTemp = new JTextField("165");
     private JLabel labelTemp = new JLabel("Température initiale");
     public JTextField jtfProba = new JTextField("0.9");
@@ -46,8 +47,10 @@ public class Menu extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(pan);
         this.setLayout(new BorderLayout());
-        boutonLancer.addActionListener(new MainTest());
-        this.getContentPane().add(boutonLancer, BorderLayout.SOUTH);
+        boutonLancerRecuit.addActionListener(new MainTest());
+        boutonLancerRecuit.setName("Recuit");
+        boutonLancerGen.addActionListener(new MainTest());
+        boutonLancerGen.setName("Gen");
         JPanel formCenterRecuit = new JPanel();
         JPanel formNorth = new JPanel();
         JPanel formCenter = new JPanel();
@@ -112,7 +115,8 @@ public class Menu extends JFrame {
         formCenterRecuit.add(labelMu);
         formCenterRecuit.add(jtfMu);
 
-        formCenterGen.setLayout(new GridLayout(2,1,0,5));
+
+        formCenterGen.setLayout(new GridLayout(2,1,5,5));
         jtfNbIterationGen.setFont(police);
         jtfNbIterationGen.setPreferredSize(new Dimension(150, 30));
         jtfNbIterationGen.setForeground(Color.BLUE);
@@ -124,10 +128,22 @@ public class Menu extends JFrame {
         formCenterGen.add(labelNbPopulation);
         formCenterGen.add(jtfNbPopulation);
 
+        JPanel buttonFormRecuit = new JPanel();
+        buttonFormRecuit.setSize(30,30);
+        JPanel buttonFormGen = new JPanel();
+        buttonFormGen.setSize(30,30);
+
+        boutonLancerRecuit.setSize(new Dimension(150, 30));
+        boutonLancerGen.setSize(new Dimension(150, 30));
+
+        buttonFormRecuit.add(boutonLancerRecuit);
+        buttonFormGen.add(boutonLancerGen);
 
         formCenter.setLayout(new GridLayout(2,1));
         formCenter.add(formCenterRecuit);
+        formCenter.add(buttonFormRecuit,BorderLayout.CENTER);
         formCenter.add(formCenterGen);
+        formCenter.add(buttonFormGen,BorderLayout.CENTER);
 
         pan.add(formCenter, BorderLayout.CENTER);
 

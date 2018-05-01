@@ -40,7 +40,7 @@ public class MainTest implements ActionListener {
         double mu = Double.parseDouble(menu.jtfMu.getText());
         int nombreIterationGen = Integer.parseInt(menu.jtfNbIterationGen.getText());
         int nombrePopulation = Integer.parseInt(menu.jtfNbPopulation.getText());
-
+        JButton jbAlgo = (JButton) e.getSource();
 
         Graphe graphe = new Graphe("./data/"+ file + ".txt");
 
@@ -53,17 +53,27 @@ public class MainTest implements ActionListener {
                 nombreIterationRecuit,
                 mu
         );
-        Solution solutionGen = gen.algoGen();
-        System.out.println(solutionGen);
 
-        Solution solutionRecuit = recuit.run();
+        Solution solutionRecuit = null,solutionGen = null;
+        if (jbAlgo.getName().equals("Gen")) {
+            solutionGen = gen.algoGen();
+            System.out.println(solutionGen);
+        } else {
+            solutionRecuit = recuit.run();
+        }
 
         // Run the GUI codes on the Event-Dispatching thread for thread safety
+        Solution finalSolutionGen = solutionGen;
+        Solution finalSolutionRecuit = solutionRecuit;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new InterfaceGraphique(solutionRecuit, graphe,"algorithme recuit simule");
-                new InterfaceGraphique(solutionGen, graphe,"algorithme Genetique");
+
+                if (jbAlgo.getName().equals("gen")) {
+                    new InterfaceGraphique(finalSolutionGen, graphe, "algorithme Genetique");
+                } else {
+                    new InterfaceGraphique(finalSolutionRecuit, graphe, "algorithme recuit simule");
+                }
             }
 
         });
