@@ -67,13 +67,13 @@ public class Genetique {
                     probaListe.set(j, probaListe.get(j)/probaTotale);
             }
 
-            List<Solution> newPopulation = new ArrayList<>();
+            List<Solution> sortPop = new ArrayList<>();
             for(int j = 0; j < population.size(); j++){
                 int index = 0;
                 double rnd = MethodesUtiles.randomDouble(0,1);
                 for(double proba : probaListe){
                     if(proba > rnd) {
-                        newPopulation.add(population.get(index));
+                        sortPop.add(population.get(index));
                         break;
                     }
                     index++;
@@ -81,8 +81,15 @@ public class Genetique {
             }
 
             //II- Croisement
-            //population.clear();
-            population =  croisement(newPopulation);
+            population.clear();
+            for(int j = 0; j < sortPop.size(); j++) {
+                Solution fille;
+                if( j == sortPop.size()-1)
+                    fille = croisement(sortPop.get(j), sortPop.get(0));
+                else
+                    fille = croisement(sortPop.get(j), sortPop.get(j+1));
+                population.add(fille);
+            }
 
             for(Solution s : population) {
                 sommetsPresents = new ArrayList<>();
@@ -97,7 +104,7 @@ public class Genetique {
                 population.set(p, mutation(population.get(p)));
             }
 
-            if (i % NBR_POPULATION/100 == 0) {
+            if (i % 100 == 0) {
                 System.out.println();
                 Solution sol;
                 sol = population.get(0);
@@ -109,7 +116,7 @@ public class Genetique {
                         solutionFinale = sol;
                     }
                 }
-                System.out.println("Meilleure Solution apres "+ i*100 +" Génération(s) =>  " + distanceTotal(sol));
+                System.out.println("Meilleure Solution apres "+ i +" Génération(s) =>  " + distanceTotal(sol));
             }
 
         }
@@ -117,23 +124,6 @@ public class Genetique {
         System.out.println("Fitness final: "+fitnessFinale);
         return solutionFinale;
     }
-
-    private Solution bestSolution(List<Solution> population){
-        double  fitness, minFitness = Integer.MAX_VALUE;
-        Solution s = new Solution();
-
-        for(int i = 0 ; i < population.size(); i++){
-            fitness = distanceTotal(population.get(i));
-            if(fitness < minFitness){
-                s = population.get(i);
-                minFitness = fitness;
-            }
-        }
-        System.out.println("Best Solution: "+s.getListeRoute()+" - "+minFitness);
-
-        return s.listeToSolution(s.getListeRoute());
-    }
-
 
     /**
      * La mutation consiste d'échanger deux sommets de deux trajets différents,
@@ -149,14 +139,13 @@ public class Genetique {
         boolean mutation = false;
 
         int i, j , k;
-        int rnd1, rnd2;
+        int rnd2;
         List<Integer> exceptRoute1 = new ArrayList<>();
         List<Integer> exceptRoute2 = new ArrayList<>();
 
 
         mutationReussi:
         for(i = 0; i < routeFille.size() - 1; i++){
-            //rnd1 = MethodesUtiles.randomVal(exceptRoute1, routeFille.size());
             exceptRoute1.add(i);
             rnd2 = MethodesUtiles.randomVal(exceptRoute2, routeFille.size());
 
@@ -195,17 +184,12 @@ public class Genetique {
                 }
                 exceptNewRoute1.add(r1);
             }
-            //exceptRoute1.add(i);
             exceptRoute2.add(rnd2);
         }
 
         if(!mutation){
 
         }
-
-        // System.out.println(i);
-        /*routeFille.set(i, (ArrayList<Integer>) newRoute1);
-        routeFille.set(i+1, (ArrayList<Integer>) newRoute2);*/
         fille.setListeRoute(routeFille);
 
         return fille;
@@ -223,6 +207,42 @@ public class Genetique {
         return capacite;
     }
 
+    private Solution croisement(Solution pere, Solution mere){
+        List<Integer> routefille = new ArrayList<>();
+        Solution fille = new Solution(routefille);
+        List<Integer> routePere;
+        List<Integer> routeMere;
+
+        routefille.add(0);
+        finIteration:
+        for(int i = 0; i < pere.getListeRoute().size(); i++){
+            List<Integer> exceptRoutePere = new ArrayList<>();
+            int rndPere = MethodesUtiles.randomValeur(exceptRoutePere, pere.getListeRoute().size());
+            routePere = pere.getListeRoute().get(rndPere);
+            exceptRoutePere.add(rndPere);
+
+            for(int j = 0; j < mere.getListeRoute().size(); j++){
+                List<Integer> exceptRouteMere = new ArrayList<>();
+                int rndMere = MethodesUtiles.randomValeur(exceptRouteMere, mere.getListeRoute().size());
+                routeMere = mere.getListeRoute().get(rndMere);
+                exceptRouteMere.add(rndMere);
+
+                for(int k = 0; k < routeMere.size(); k++) {
+                    if(routePere.contains(routeMere.get(k)))
+                        break;
+                    if(k == routeMere.size()-1){
+                        routefille.addAll(routePere);
+                        routefille.add(0);
+                        routefille.addAll(routeMere);
+                        break finIteration;
+                    }
+                }
+
+            }
+        }
+        return fille;
+    }
+    /*
     private List<Solution> croisement(List<Solution> population){
         List<Solution> newPopulation = new ArrayList<>();
 
@@ -266,7 +286,7 @@ public class Genetique {
             newPopulation.add(fille);
         }
         return newPopulation;
-    }
+    }*/
     /**
      * Calcul du cout total d'une solution
      * @param sol : Solution dont le coût sera calculé

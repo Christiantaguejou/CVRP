@@ -27,9 +27,9 @@ public class Menu extends JFrame {
     private JLabel labelNbIteAvtChgtTemp = new JLabel("Nombre iteration avant changement de température");
     public JTextField jtfMu = new JTextField("0.99");
     private JLabel labelMu = new JLabel("Mu");
-    public JTextField jtfNbIterationGen = new JTextField("100");
+    public JTextField jtfNbIterationGen = new JTextField("10000");
     private JLabel labelNbIterationGen = new JLabel("Nombre itérations");
-    public JTextField jtfNbPopulation = new JTextField("10000");
+    public JTextField jtfNbPopulation = new JTextField("150");
     private JLabel labelNbPopulation = new JLabel("Nombre population");
     private JLabel labelFichier = new JLabel("Fichier");
     public JRadioButton jrb1 = new JRadioButton("data01");
