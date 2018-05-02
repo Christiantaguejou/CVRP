@@ -5,6 +5,8 @@ import metier.Lieu;
 import metier.Solution;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.*;
 
@@ -32,13 +34,26 @@ public class InterfaceGraphique extends JFrame{
         this.coutSolution = coutSolution;
         JPanel jPanel = new JPanel();
 
+        Font titleFont = new Font("Arial", Font.BOLD, 20);
+
         canvas = new DrawCanvas();    // Construct the drawing canvas
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 
+        Border blackline = BorderFactory.createLineBorder(Color.black);
+        TitledBorder titleCout = BorderFactory.createTitledBorder(
+                blackline, "Coût",0,0,titleFont);
+        titleCout.setTitleJustification(TitledBorder.CENTER);
+
+        TitledBorder titleChemin = BorderFactory.createTitledBorder(
+                blackline, "Chemin",0,0,titleFont);
+        titleChemin.setTitleJustification(TitledBorder.CENTER);
+
         JLabel label1 = new JLabel("Coût de cette solution: " + coutSolution);
+        JPanel jPanel2 = new JPanel();
+        label1.setBorder(titleCout);
+        jPanel2.setBorder(titleChemin);
         ArrayList<JLabel> jLabelArrayList = new ArrayList<>();
 
-        jLabelArrayList.add(new JLabel("Chemin:"));
         String chemin = "";
         Integer lastInteger = 1;
         for (Integer integer : solution.getListeSolution()) {
@@ -49,13 +64,16 @@ public class InterfaceGraphique extends JFrame{
             chemin += " " + integer;
             lastInteger = integer;
         }
-
-        jPanel.setLayout(new GridLayout(2 + jLabelArrayList.size(),1));
-        jPanel.add(label1);
         for (JLabel jLabel: jLabelArrayList) {
-            jPanel.add(jLabel);
+            jPanel2.add(jLabel);
         }
-        
+
+        jPanel.setLayout(new GridLayout(2 ,1));
+        jPanel2.setLayout(new GridLayout(2 + jLabelArrayList.size(),1));
+        jPanel.add(label1);
+        jPanel.add(jPanel2);
+
+
 
         // Set the Drawing JPanel as the JFrame's content-pane
         Container cp = getContentPane();
