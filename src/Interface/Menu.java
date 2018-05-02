@@ -20,8 +20,6 @@ public class Menu extends JFrame {
     private JButton boutonLancerGen = new JButton("Lancer l'algorithme génétique");
     public JTextField jtfTemp = new JTextField("165");
     private JLabel labelTemp = new JLabel("Température initiale");
-    public JTextField jtfProba = new JTextField("0.9");
-    private JLabel labelProba = new JLabel("Probabilité");
     public JTextField jtfNbIterationRecuit = new JTextField("1000000");
     private JLabel labelNbIterationRecuit = new JLabel("Nombre iteration");
     public JTextField jtfNbIteAvtChgtTemp = new JTextField("6");
@@ -65,7 +63,7 @@ public class Menu extends JFrame {
         formCenterRecuit.setBorder(titleRecuit);
 
         TitledBorder titleGen = BorderFactory.createTitledBorder(
-                blackline, "Genenetique",0,0,title);
+                blackline, "Génétique",0,0,title);
         titleGen.setTitleJustification(TitledBorder.CENTER);
         formCenterGen.setBorder(titleGen);
 
@@ -92,9 +90,6 @@ public class Menu extends JFrame {
         jtfTemp.setFont(police);
         jtfTemp.setPreferredSize(new Dimension(150, 30));
         jtfTemp.setForeground(Color.BLUE);
-        jtfProba.setFont(police);
-        jtfProba.setPreferredSize(new Dimension(150, 30));
-        jtfProba.setForeground(Color.BLUE);
         jtfNbIterationRecuit.setFont(police);
         jtfNbIterationRecuit.setPreferredSize(new Dimension(150, 30));
         jtfNbIterationRecuit.setForeground(Color.BLUE);
@@ -106,8 +101,6 @@ public class Menu extends JFrame {
         jtfMu.setForeground(Color.BLUE);
         formCenterRecuit.add(labelTemp);
         formCenterRecuit.add(jtfTemp);
-        formCenterRecuit.add(labelProba);
-        formCenterRecuit.add(jtfProba);
         formCenterRecuit.add(labelNbIterationRecuit);
         formCenterRecuit.add(jtfNbIterationRecuit);
         formCenterRecuit.add(labelNbIteAvtChgtTemp);

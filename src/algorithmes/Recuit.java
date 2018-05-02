@@ -21,14 +21,12 @@ public class Recuit {
     private Solution solutionMin;
     private double fMin;
     private double temperature;
-    private double probabilite;
     private int nombreIterationAvantChangementTemp;
     private int nombreIteration;
     private double mu;
 
     public Recuit(Graphe graphe,
                   double temperatureInitiale,
-                  double probabilite,
                   int nombreIterationAvantChangementTemp,
                   int nombreIteration,
                   double mu) {
@@ -39,7 +37,6 @@ public class Recuit {
         this.solutionMin = solutionXi;
         this.fMin = this.calculSolution(solutionMin);
         this.temperature = temperatureInitiale;
-        this.probabilite = probabilite;
         this.nombreIterationAvantChangementTemp = nombreIterationAvantChangementTemp;
         this.nombreIteration = nombreIteration;
         this.mu = mu;

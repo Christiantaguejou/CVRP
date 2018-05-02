@@ -34,7 +34,6 @@ public class MainTest implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String file = menu.selectedRadioButton.getText();
         double temperatureInitiale = Double.parseDouble(menu.jtfTemp.getText());
-        double probabilite = Double.parseDouble(menu.jtfProba.getText());
         int nombreIterationAvantChangementTemp = Integer.parseInt(menu.jtfNbIteAvtChgtTemp.getText());
         int nombreIterationRecuit = Integer.parseInt(menu.jtfNbIterationRecuit.getText());
         double mu = Double.parseDouble(menu.jtfMu.getText());
@@ -48,7 +47,6 @@ public class MainTest implements ActionListener {
         Recuit recuit = new Recuit(
                 graphe,
                 temperatureInitiale,
-                probabilite,
                 nombreIterationAvantChangementTemp,
                 nombreIterationRecuit,
                 mu
