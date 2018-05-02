@@ -77,7 +77,6 @@ public class InterfaceGraphique extends JFrame{
             RectDraw rectDraw = new RectDraw(colorList.get(indiceCurrentColor));
             jPanel2.add(rectDraw);
             jPanel2.add(jLabel);
-            System.out.println("ici" + colorList.get(indiceCurrentColor));
             indiceCurrentColor++;
         }
         indiceCurrentColor = 0;
@@ -108,7 +107,6 @@ public class InterfaceGraphique extends JFrame{
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            System.out.println("draw: " + colorList);
             setBackground(Color.WHITE);
             g.setColor(colorList.get(indiceCurrentColor));
             indiceCurrentColor++;
@@ -126,7 +124,6 @@ public class InterfaceGraphique extends JFrame{
                     if (lieu.getId() == 0 && lieu2.getId() == 0) {
                         Random rand = new Random();
                         Color color = colorList.get(indiceCurrentColor);
-                        System.out.println(color);
                         indiceCurrentColor++;
                         g.setColor(color);
                     }
@@ -166,7 +163,7 @@ public class InterfaceGraphique extends JFrame{
     }
 
     private void setColors(){
-        
+
         ArrayList<Lieu> lieux = new ArrayList<>();
         for (Integer integer : solution.getListeSolution()) {
             lieux.add(graphe.getLieux().get(integer));
@@ -180,8 +177,7 @@ public class InterfaceGraphique extends JFrame{
                 Lieu lieu2 = (Lieu) iterator.next();
                 if (lieu.getId() == 0 && lieu2.getId() == 0) {
                     Random rand = new Random();
-                    int test = rand.nextInt(0xFFFFFF) * 2;
-                    Color color = new Color(test);
+                    Color color = new Color(rand.nextInt(0xFFFFFF));
                     colorList.add(color);
                 }
 
