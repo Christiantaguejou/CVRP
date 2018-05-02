@@ -24,12 +24,14 @@ public class Recuit {
     private int nombreIterationAvantChangementTemp;
     private int nombreIteration;
     private double mu;
+    private String solutionType;
 
     public Recuit(Graphe graphe,
                   double temperatureInitiale,
                   int nombreIterationAvantChangementTemp,
                   int nombreIteration,
-                  double mu) {
+                  double mu,
+                  String solutionType) {
 
         this.graphe = graphe;
         this.solutionXi = this.graphe.solutionGlouton();
@@ -40,6 +42,7 @@ public class Recuit {
         this.nombreIterationAvantChangementTemp = nombreIterationAvantChangementTemp;
         this.nombreIteration = nombreIteration;
         this.mu = mu;
+        this.solutionType = solutionType;
     }
 
     public Solution run() {
@@ -56,7 +59,7 @@ public class Recuit {
 
             for (int k = 0; k <= n1; k++) {
                 for (int l = 1; l <= n2; l++) {
-                    Solution solutionY = choisirSolution(solutionXi);
+                    Solution solutionY = solutionType.equals("meilleure sur cent au hasard")? choisirSolutionDansPlusieurs(solutionXi) : choisirSolution(solutionXi);
                     double deltaF = calculSolution(solutionY) - calculSolution(solutionXi);
                     if (deltaF <= 0) {
                         solutionXip1 = solutionY;

@@ -16,6 +16,7 @@ public class Menu extends JFrame {
 
     private JPanel pan = new JPanel();
     public JRadioButton selectedRadioButton;
+    public JRadioButton selectedRadioButtonSolution;
     private JButton boutonLancerRecuit = new JButton("Lancer l'algorithme de Recuit");
     private JButton boutonLancerGen = new JButton("Lancer l'algorithme génétique");
     public JTextField jtfTemp = new JTextField("165");
@@ -36,6 +37,10 @@ public class Menu extends JFrame {
     public JRadioButton jrb3 = new JRadioButton("data03");
     public JRadioButton jrb4 = new JRadioButton("data04");
     public JRadioButton jrb5 = new JRadioButton("data05");
+    private JLabel labelNombreVoisin = new JLabel("Solution de type");
+    public JRadioButton jrbSolutionSeule = new JRadioButton("seule au hasard");
+    public JRadioButton jrbSolutionSeuleDansCent = new JRadioButton("meilleure sur cent au hasard");
+    private JLabel jLabelNull = new JLabel("           ");
 
 
     public Menu(){
@@ -99,6 +104,10 @@ public class Menu extends JFrame {
         jtfMu.setFont(police);
         jtfMu.setPreferredSize(new Dimension(150, 30));
         jtfMu.setForeground(Color.BLUE);
+        jrbSolutionSeule.setSelected(true);
+        selectedRadioButtonSolution = jrbSolutionSeule;
+        jrbSolutionSeule.addActionListener(new StateListener2());
+        jrbSolutionSeuleDansCent.addActionListener(new StateListener2());
         formCenterRecuit.add(labelTemp);
         formCenterRecuit.add(jtfTemp);
         formCenterRecuit.add(labelNbIterationRecuit);
@@ -107,6 +116,11 @@ public class Menu extends JFrame {
         formCenterRecuit.add(jtfNbIteAvtChgtTemp);
         formCenterRecuit.add(labelMu);
         formCenterRecuit.add(jtfMu);
+        formCenterRecuit.add(labelNombreVoisin);
+        formCenterRecuit.add(jLabelNull);
+        formCenterRecuit.add(jrbSolutionSeule);
+        formCenterRecuit.add(jrbSolutionSeuleDansCent);
+
 
 
         formCenterGen.setLayout(new GridLayout(2,1,5,5));
@@ -151,6 +165,16 @@ public class Menu extends JFrame {
                 selectedRadioButton.setSelected(false);
             }
             selectedRadioButton = (JRadioButton) e.getSource();
+        }
+    }
+
+    private class StateListener2 implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (selectedRadioButtonSolution != null) {
+                selectedRadioButtonSolution.setSelected(false);
+            }
+            selectedRadioButtonSolution = (JRadioButton) e.getSource();
         }
     }
 }

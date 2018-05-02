@@ -33,6 +33,7 @@ public class MainTest implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String file = menu.selectedRadioButton.getText();
+        String solutionType = menu.selectedRadioButtonSolution.getText();
         double temperatureInitiale = Double.parseDouble(menu.jtfTemp.getText());
         int nombreIterationAvantChangementTemp = Integer.parseInt(menu.jtfNbIteAvtChgtTemp.getText());
         int nombreIterationRecuit = Integer.parseInt(menu.jtfNbIterationRecuit.getText());
@@ -49,7 +50,8 @@ public class MainTest implements ActionListener {
                 temperatureInitiale,
                 nombreIterationAvantChangementTemp,
                 nombreIterationRecuit,
-                mu
+                mu,
+                solutionType
         );
 
         Solution solutionRecuit = null,solutionGen = null;
