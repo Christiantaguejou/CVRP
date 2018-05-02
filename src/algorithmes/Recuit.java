@@ -4,6 +4,8 @@ import metier.Graphe;
 import metier.Lieu;
 import metier.Solution;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 import static java.lang.Math.random;
@@ -41,30 +43,45 @@ public class Recuit {
     }
 
     public Solution run() {
+
+        System.out.println("Cout solution initiale: " + calculSolution(solutionXi));
         int n1 = nombreIteration;
         int n2 = nombreIterationAvantChangementTemp;
+        System.out.println(solutionMin);
+        String csvFile = "./data/data17.csv";
+        try {
+            FileWriter writer = new FileWriter(csvFile);
+            writer.write("Nombre iterations; Cout solution actuelle \n");
 
-        for (int k = 0; k <= n1; k++) {
-            for (int l = 1; l <= n2; l++) {
-                Solution solutionY = choisirSolutionDansPlusieurs(solutionXi);
-                double deltaF = calculSolution(solutionY) - calculSolution(solutionXi);
-                if (deltaF <= 0) {
-                    solutionXip1 = solutionY;
-                    if (calculSolution(solutionXip1) < fMin) {
-                        fMin = calculSolution(solutionXip1);
-                        this.solutionMin = solutionXip1;
+
+            for (int k = 0; k <= n1; k++) {
+                for (int l = 1; l <= n2; l++) {
+                    Solution solutionY = choisirSolution(solutionXi);
+                    double deltaF = calculSolution(solutionY) - calculSolution(solutionXi);
+                    if (deltaF <= 0) {
+                        solutionXip1 = solutionY;
+                        if (calculSolution(solutionXip1) < fMin) {
+                            fMin = calculSolution(solutionXip1);
+                            writer.write(k + ";" + fMin + "\n");
+                            this.solutionMin = solutionXip1;
+                        }
+                    } else {
+                        double p = random();
+                        double pI = Math.exp(-deltaF/temperature);
+                        if (p <= pI)
+                            this.solutionXip1 = solutionY;
+                        else
+                            this.solutionXip1 = solutionXi;
                     }
-                } else {
-                    double p = random();
-                    double pI = Math.exp(-deltaF/temperature);
-                    if (p <= pI)
-                        this.solutionXip1 = solutionY;
-                    else
-                        this.solutionXip1 = solutionXi;
+                    solutionXi = solutionXip1;
                 }
-                solutionXi = solutionXip1;
+                temperature = mu * temperature;
             }
-            temperature = mu * temperature;
+
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         System.out.println("Best solution Recuit : " + solutionMin.toString() + " : " + calculSolution(solutionMin));
