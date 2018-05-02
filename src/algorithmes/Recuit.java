@@ -4,9 +4,7 @@ import metier.Graphe;
 import metier.Lieu;
 import metier.Solution;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.random;
 
@@ -48,7 +46,7 @@ public class Recuit {
 
         for (int k = 0; k <= n1; k++) {
             for (int l = 1; l <= n2; l++) {
-                Solution solutionY = choisirSolution(solutionXi);
+                Solution solutionY = choisirSolutionDansPlusieurs(solutionXi);
                 double deltaF = calculSolution(solutionY) - calculSolution(solutionXi);
                 if (deltaF <= 0) {
                     solutionXip1 = solutionY;
@@ -94,6 +92,29 @@ public class Recuit {
 
             solutionResultat = new Solution(solutionTemp);
         } while (!quantiteRespectee(solutionResultat));
+        return solutionResultat;
+    }
+
+    private Solution choisirSolutionDansPlusieurs(Solution solution) {
+
+        Comparator comparator = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return (int) (calculSolution((Solution) o2) - calculSolution((Solution) o1));
+            }
+        };
+        HashSet<Solution> listVoisin= new HashSet<>();
+        int i = 0;
+        while (i <= 100) {
+            listVoisin.add(choisirSolution(solution));
+            i++;
+        }
+        Solution solutionResultat;
+        Set<Solution> treeSet = new TreeSet<Solution>(comparator);
+        treeSet.addAll(listVoisin);
+
+        solutionResultat = ((TreeSet<Solution>) treeSet).last();
+
         return solutionResultat;
     }
 
