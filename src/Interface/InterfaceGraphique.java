@@ -6,9 +6,7 @@ import metier.Solution;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by tardy on 25/04/2018.
@@ -36,12 +34,27 @@ public class InterfaceGraphique extends JFrame{
 
         canvas = new DrawCanvas();    // Construct the drawing canvas
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-        JLabel label1 = new JLabel("Coût de cette solution: " + coutSolution);
-        JLabel label2 = new JLabel("Chemin: " + solution);
 
-        jPanel.setLayout(new GridLayout(2,1));
+        JLabel label1 = new JLabel("Coût de cette solution: " + coutSolution);
+        ArrayList<JLabel> jLabelArrayList = new ArrayList<>();
+
+        jLabelArrayList.add(new JLabel("Chemin:"));
+        String chemin = "";
+        Integer lastInteger = 1;
+        for (Integer integer : solution.getListeSolution()) {
+            if (integer == 0 && lastInteger == 0) {
+                jLabelArrayList.add(new JLabel(chemin));
+                chemin = "";
+            }
+            chemin += " " + integer;
+            lastInteger = integer;
+        }
+
+        jPanel.setLayout(new GridLayout(2 + jLabelArrayList.size(),1));
         jPanel.add(label1);
-        jPanel.add(label2);
+        for (JLabel jLabel: jLabelArrayList) {
+            jPanel.add(jLabel);
+        }
         
 
         // Set the Drawing JPanel as the JFrame's content-pane
